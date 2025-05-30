@@ -67,7 +67,7 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
             return;
         }
 
-        const userData = await userService.getUserById(id);
+        const userData = await userService.getUserById(parseInt(id));
         if (!userData) {
             res.status(404).json({
                 message: 'User not found',
@@ -103,10 +103,10 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
             return;
         }
 
-        const existingUser = await userService.getUserExists(name);
-        if (existingUser && existingUser.id !== parseInt(id)) {
-            res.status(400).json({
-                message: 'User with this name already exists',
+        const userNotFound = await userService.getUserById(parseInt(id));
+        if (!userNotFound) {
+            res.status(404).json({
+                message: 'User with this ID does not exist',
             });
             return;
         }

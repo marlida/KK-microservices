@@ -20,7 +20,11 @@ export class userService {
 
     static getUser = async (): Promise<User[]> => {
         try {
-            const users = await prisma.user.findMany();
+            const users = await prisma.user.findMany({
+                orderBy: {
+                    id: 'asc'
+                }
+            });
             return users;
         } catch (error) {
             if (error instanceof Error) {
@@ -31,10 +35,10 @@ export class userService {
         }
     }
 
-    static getUserById = async (id: string): Promise<User | null> => {
+    static getUserById = async (id: number): Promise<User | null> => {
         try {
             const user = await prisma.user.findUnique({
-                where: { id: Number(id) },
+                where: { id: id },
             });
             return user;
         } catch (error) {
@@ -63,6 +67,28 @@ export class userService {
 
     static updateUser = async (id: number, userData: UserCreateInput): Promise<User> => {
         try {
+            const [existingTel, existingName] = await Promise.all([
+                prisma.user.findFirst({
+                    where: {
+                        tel: userData.tel,
+                        NOT: { id }
+                    }
+                }),
+                prisma.user.findFirst({
+                    where: {
+                        name: userData.name,
+                        NOT: { id }
+                    }
+                })
+            ]);
+
+            if (existingTel) {
+                throw new Error('Phone number already exists');
+            }
+            if (existingName) {
+                throw new Error('User with this name already exists');
+            }
+
             const updatedUser = await prisma.user.update({
                 where: { id: id },
                 data: userData,
