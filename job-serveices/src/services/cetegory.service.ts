@@ -1,6 +1,6 @@
 import { Category, CategoryCreateInput } from "../types/category";
 import prisma from "../config/db";
-import redisClient, { clearCache } from "../config/redis";
+import redisClient, { clearRelatedProductCache } from "../config/redis";
 
 export class categoryService {
     static createCategory = async (categoryData: { name?: string; brandId?: number }): Promise<Category> => {
@@ -22,7 +22,7 @@ export class categoryService {
                 }
             });
             
-            await clearCache();
+            await clearRelatedProductCache();
             
             return newCategory;
         } catch (error) {
@@ -71,6 +71,9 @@ export class categoryService {
             }
             const category = await prisma.category.findUnique({
                 where: { id: id },
+                include: {
+                    brand: true, 
+                }
             });
 
             if (!category) {
@@ -126,7 +129,7 @@ export class categoryService {
                 where: { id: id },
                 data: categoryData,
             });
-            await clearCache();
+            await clearRelatedProductCache();
             return updatedCategory;
         } catch (error) {
             if (error instanceof Error) {
@@ -142,7 +145,7 @@ export class categoryService {
             const deletedCategory = await prisma.category.delete({
                 where: { id: id },
             });
-            await clearCache();
+            await clearRelatedProductCache();
             return deletedCategory;
         } catch (error) {
             if (error instanceof Error) {

@@ -1,6 +1,6 @@
 import { Brand, BrandCreateInput } from "../types/brand";
 import prisma from "../config/db";
-import redisClient, { clearCache } from "../config/redis";
+import redisClient, { clearRelatedProductCache } from "../config/redis";
 
 export class brandService {
 
@@ -11,8 +11,8 @@ export class brandService {
             });
             
             // Clear cache after creating
-            await clearCache();
-            
+            await clearRelatedProductCache();
+
             return newBrand;
         } catch (error) {
             if (error instanceof Error) {
@@ -41,7 +41,7 @@ export class brandService {
             console.log("Brand data retrieved from database");
 
             // Cache the result
-            await redisClient.set("brands:all", JSON.stringify(brands), {
+            await redisClient.set("brands:list", JSON.stringify(brands), {
                 EX: 60 * 60, // Cache for 1 hour
             });
             return brands;
@@ -56,7 +56,7 @@ export class brandService {
 
     static getBrandById = async (id: number, options?: { catId?: number; prodId?: number; include?: 'categories' | 'products' | 'both' }): Promise<Brand | null> => {
         try {
-            const cacheKey = `brand:${id}:${options?.include || 'basic'}:${options?.catId || ''}:${options?.prodId || ''}`;
+            const cacheKey = `brand:${id}:${options?.include || 'onlybrand'}:${options?.catId || ''}:${options?.prodId || ''}`;
             const cached = await redisClient.get(cacheKey);
             
             if (cached) {
@@ -139,7 +139,7 @@ export class brandService {
             });
             
             // Clear cache after updating
-            await clearCache();
+            await clearRelatedProductCache();
 
             return updatedBrand;
         } catch (error) {
@@ -158,7 +158,7 @@ export class brandService {
             });
             
             // Clear cache after deleting
-            await clearCache();
+            await clearRelatedProductCache();
 
             return deletedBrand;
         } catch (error) {

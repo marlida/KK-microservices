@@ -123,7 +123,7 @@ export class adminService {
             const deletedAdmin = await prisma.admin.delete({
                 where: { id: id },
             });
-            await this.clearAdminCacheById(id);
+            await this.clearAdminCache();
             return deletedAdmin;
         } catch (error) {
             if (error instanceof Error) {

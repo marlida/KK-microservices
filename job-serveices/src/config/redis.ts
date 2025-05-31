@@ -42,7 +42,9 @@ export const clearRelatedProductCache = async () => {
       "product:*",
       "products:*",
       "category:*",
-      "categories:*"
+      "categories:*",
+      "order:*",
+      "orders:*",
     ];
 
     for (const pattern of patterns) {
