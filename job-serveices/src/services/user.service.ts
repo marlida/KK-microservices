@@ -1,165 +1,167 @@
-import { Brand, BrandCreateInput } from "../types/brand";
+import { User, UserCreateInput } from "../types/user";
 import prisma from "../config/db";
 import redisClient from "../config/redis";
 
-export class brandService {
-    private static clearBrandCache = async (id?: number) => {
-        try {
-            await redisClient.del("brands:list");
-            
-            if (id) {
-                await redisClient.del(`brand:${id}`);
-            }
-        } catch (error) {
-            console.error("Error clearing cache:", error);
-        }
+export class userService {
+    private static clearUserCache = async () => {
+        await redisClient.del("users:list");
     }
 
-    static createBrand = async (brandData: BrandCreateInput): Promise<Brand> => {
+    private static clearUserCacheById = async (id: number) => {
+        await redisClient.del(`user:${id}`);
+    }
+
+    static createUser = async (userData: UserCreateInput): Promise<User> => {
         try {
-            const newBrand = await prisma.brand.create({
-                data: brandData,
+            const telephoneExists = await prisma.user.findFirst({
+                where: {
+                    tel: userData.tel,
+                },
             });
-            
+            if (telephoneExists) {
+                throw new Error('User with this telephone number already exists');
+            }
+
+            const newUser = await prisma.user.create({
+                data: userData,
+            });
+
             // Clear cache after creating
-            await this.clearBrandCache();
-            
-            return newBrand;
+            await userService.clearUserCache();
+
+            return newUser;
         } catch (error) {
             if (error instanceof Error) {
-                throw new Error(`Error creating brand: ${error.message}`);
+                throw new Error(`Error creating user: ${error.message}`);
             } else {
-                throw new Error("Error creating brand: Unknown error");
+                throw new Error("Error creating user: Unknown error");
             }
         }
     }
 
-    static getBrand = async (): Promise<Brand[]> => {
+    static getUser = async (): Promise<User[]> => {
         try {
-            // Try to get brands from cache
-            const cached = await redisClient.get("brands:list");
+            // Try to get users from cache
+            const cached = await redisClient.get("users:list");
             if (cached) {
-                console.log("Brand data retrieved from cache");
+                console.log("User data retrieved from cache");
                 return JSON.parse(cached);
             }
 
             // If not cached, get from DB
-            const brands = await prisma.brand.findMany({
+            const users = await prisma.user.findMany({
                 orderBy: {
                     id: 'asc'
                 }
             });
-            console.log("Brand data retrieved from database");
+            console.log("User data retrieved from database");
 
             // Cache the result
-            await redisClient.set("brands:all", JSON.stringify(brands), {
+            await redisClient.set("users:list", JSON.stringify(users), {
                 EX: 60 * 60, // Cache for 1 hour
             });
-            return brands;
+            return users;
         } catch (error) {
             if (error instanceof Error) {
-                throw new Error(`Error retrieving brand data: ${error.message}`);
+                throw new Error(`Error retrieving user data: ${error.message}`);
             } else {
-                throw new Error("Error retrieving brand data: Unknown error");
+                throw new Error("Error retrieving user data: Unknown error");
             }
         }
     }
 
-    static getBrandById = async (id: number, catId?: number): Promise<Brand | null> => {
+    static getUserById = async (id: number): Promise<User | null> => {
         try {
-            const cached = await redisClient.get(`brand:${id}`);
+            const cached = await redisClient.get(`user:${id}`);
             if (cached) {
-                console.log("Returning cached brand data by ID");
+                console.log("Returning cached user data by ID");
                 return JSON.parse(cached);
             }
 
-            console.log(`Retrieving brand with ID ${id} ${catId} from database`);
-            const brand = await prisma.brand.findUnique({
-                where: { id: id },
-                include: {
-                    categories: { where: { id: catId } },
-                }
+            console.log(`Retrieving user with ID ${id} from database`);
+            const user = await prisma.user.findUnique({
+                where: { id: id }
             });
 
-            if (!brand) {
-                console.log(`Brand with ID ${id} not found`);
+            if (!user) {
+                console.log(`User with ID ${id} not found`);
                 return null;
             }
-            
-            await redisClient.set(`brand:${id}`, JSON.stringify(brand), {
+
+            await redisClient.set(`user:${id}`, JSON.stringify(user), {
                 EX: 60 * 60, // Cache for 1 hour
             });
-            return brand;
+            return user;
         } catch (error) {
             if (error instanceof Error) {
-                throw new Error(`Error retrieving brand by ID: ${error.message}`);
+                throw new Error(`Error retrieving user by ID: ${error.message}`);
             } else {
-                throw new Error("Error retrieving brand by ID: Unknown error");
+                throw new Error("Error retrieving user by ID: Unknown error");
             }
         }
     }
 
-    static getBrandExists = async (name: string): Promise<Brand | null> => {
+    static getUserExists = async (name: string): Promise<User | null> => {
         try {
-            const brand = await prisma.brand.findMany({
+            const user = await prisma.user.findMany({
                 where: { name: String(name) },
             });
-            return brand[0] || null;
+            return user[0] || null;
         } catch (error) {
             if (error instanceof Error) {
-                throw new Error(`Error retrieving brand by name: ${error.message}`);
+                throw new Error(`Error retrieving user by name: ${error.message}`);
             } else {
-                throw new Error("Error retrieving brand by name: Unknown error");
+                throw new Error("Error retrieving user by name: Unknown error");
             }
         }
     }
 
-    static updateBrand = async (id: number, brandData: BrandCreateInput): Promise<Brand> => {
+    static updateUser = async (id: number, userData: UserCreateInput): Promise<User> => {
         try {
-            const existingName = await prisma.brand.findFirst({
+            const existingName = await prisma.user.findFirst({
                 where: {
-                    name: brandData.name,
+                    name: userData.name,
                     NOT: { id }
                 }
             });
 
             if (existingName) {
-                throw new Error('Brand with this name already exists');
+                throw new Error('User with this name already exists');
             }
 
-            const updatedBrand = await prisma.brand.update({
+            const updatedUser = await prisma.user.update({
                 where: { id: id },
-                data: brandData,
+                data: userData,
             });
-            
+
             // Clear cache after updating
-            await this.clearBrandCache(id);
-            
-            return updatedBrand;
+            await userService.clearUserCache();
+
+            return updatedUser;
         } catch (error) {
             if (error instanceof Error) {
-                throw new Error(`Error updating brand: ${error.message}`);
+                throw new Error(`Error updating user: ${error.message}`);
             } else {
-                throw new Error("Error updating brand: Unknown error");
+                throw new Error("Error updating user: Unknown error");
             }
         }
     }
 
-    static deleteBrand = async (id: number): Promise<Brand> => {
+    static deleteUser = async (id: number): Promise<User> => {
         try {
-            const deletedBrand = await prisma.brand.delete({
+            const deletedUser = await prisma.user.delete({
                 where: { id: id },
             });
-            
+
             // Clear cache after deleting
-            await this.clearBrandCache(id);
-            
-            return deletedBrand;
+            await userService.clearUserCache();
+
+            return deletedUser;
         } catch (error) {
             if (error instanceof Error) {
-                throw new Error(`Error deleting brand: ${error.message}`);
+                throw new Error(`Error deleting user: ${error.message}`);
             } else {
-                throw new Error("Error deleting brand: Unknown error");
+                throw new Error("Error deleting user: Unknown error");
             }
         }
     }

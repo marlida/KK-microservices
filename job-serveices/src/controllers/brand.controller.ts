@@ -59,16 +59,18 @@ export const getBrand = async (req: Request, res: Response): Promise<void> => {
 
 export const getBrandById = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { id, catId } = req.params;
-        if (!id) {
-            res.status(400).json({
-                message: 'Brand ID is required',
-            });
-            return;
-        }
+        const { id } = req.params;
+        const { catId, prodId, include } = req.query;
 
-        const brandData = await brandService.getBrandById(parseInt(id), parseInt(catId));
-        if (!brandData) {
+        const options = {
+            catId: catId ? parseInt(catId as string) : undefined,
+            prodId: prodId ? parseInt(prodId as string) : undefined,
+            include: include as 'categories' | 'products' | 'both' || undefined
+        };
+
+        const brand = await brandService.getBrandById(parseInt(id), options);
+        
+        if (!brand) {
             res.status(404).json({
                 message: 'Brand not found',
             });
@@ -76,17 +78,17 @@ export const getBrandById = async (req: Request, res: Response): Promise<void> =
         }
 
         res.status(200).json({
-            message: 'Brand data retrieved successfully',
-            data: brandData,
+            message: 'Brand retrieved successfully',
+            data: brand,
         });
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({
-                message: `Error retrieving brand data: ${error.message}`,
+                message: `Error retrieving brand: ${error.message}`,
             });
         } else {
             res.status(500).json({
-                message: 'Error retrieving brand data: Unknown error',
+                message: 'Error retrieving brand: Unknown error',
             });
         }
     }

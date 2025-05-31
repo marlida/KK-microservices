@@ -1,19 +1,8 @@
 import { Brand, BrandCreateInput } from "../types/brand";
 import prisma from "../config/db";
-import redisClient from "../config/redis";
+import redisClient, { clearCache } from "../config/redis";
 
 export class brandService {
-    private static clearBrandCache = async (id?: number) => {
-        try {
-            await redisClient.del("brands:list");
-            
-            if (id) {
-                await redisClient.del(`brand:${id}`);
-            }
-        } catch (error) {
-            console.error("Error clearing cache:", error);
-        }
-    }
 
     static createBrand = async (brandData: BrandCreateInput): Promise<Brand> => {
         try {
@@ -22,7 +11,7 @@ export class brandService {
             });
             
             // Clear cache after creating
-            await this.clearBrandCache();
+            await clearCache();
             
             return newBrand;
         } catch (error) {
@@ -65,20 +54,36 @@ export class brandService {
         }
     }
 
-    static getBrandById = async (id: number, catId?: number): Promise<Brand | null> => {
+    static getBrandById = async (id: number, options?: { catId?: number; prodId?: number; include?: 'categories' | 'products' | 'both' }): Promise<Brand | null> => {
         try {
-            const cached = await redisClient.get(`brand:${id}`);
+            const cacheKey = `brand:${id}:${options?.include || 'basic'}:${options?.catId || ''}:${options?.prodId || ''}`;
+            const cached = await redisClient.get(cacheKey);
+            
             if (cached) {
                 console.log("Returning cached brand data by ID");
                 return JSON.parse(cached);
             }
 
-            console.log(`Retrieving brand with ID ${id} ${catId} from database`);
+            console.log(`Retrieving brand with ID ${id} from database`);
+            
+            // สร้าง include object ตาม options
+            let includeOptions: any = {};
+            
+            if (options?.include === 'categories' || options?.include === 'both') {
+                includeOptions.categories = options?.catId 
+                    ? { where: { id: options.catId } }
+                    : true;
+            }
+            
+            if (options?.include === 'products' || options?.include === 'both') {
+                includeOptions.products = options?.prodId 
+                    ? { where: { id: options.prodId } }
+                    : true;
+            }
+
             const brand = await prisma.brand.findUnique({
                 where: { id: id },
-                include: {
-                    categories: { where: { id: catId } },
-                }
+                include: includeOptions
             });
 
             if (!brand) {
@@ -86,9 +91,10 @@ export class brandService {
                 return null;
             }
             
-            await redisClient.set(`brand:${id}`, JSON.stringify(brand), {
+            await redisClient.set(cacheKey, JSON.stringify(brand), {
                 EX: 60 * 60, // Cache for 1 hour
             });
+            
             return brand;
         } catch (error) {
             if (error instanceof Error) {
@@ -133,8 +139,8 @@ export class brandService {
             });
             
             // Clear cache after updating
-            await this.clearBrandCache(id);
-            
+            await clearCache();
+
             return updatedBrand;
         } catch (error) {
             if (error instanceof Error) {
@@ -152,8 +158,8 @@ export class brandService {
             });
             
             // Clear cache after deleting
-            await this.clearBrandCache(id);
-            
+            await clearCache();
+
             return deletedBrand;
         } catch (error) {
             if (error instanceof Error) {

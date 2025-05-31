@@ -1,20 +1,8 @@
 import { Category, CategoryCreateInput } from "../types/category";
 import prisma from "../config/db";
-import redisClient from "../config/redis";
+import redisClient, { clearCache } from "../config/redis";
 
 export class categoryService {
-    private static clearCategoryCache = async (id?: number) => {
-        try {
-            await redisClient.del("categories:list");
-
-            if (id) {
-                await redisClient.del(`category:${id}`);
-            }
-        } catch (error) {
-            console.error("Error clearing cache:", error);
-        }
-    }
-
     static createCategory = async (categoryData: { name?: string; brandId?: number }): Promise<Category> => {
         try {
             if (categoryData.brandId) {
@@ -34,7 +22,7 @@ export class categoryService {
                 }
             });
             
-            await this.clearCategoryCache();
+            await clearCache();
             
             return newCategory;
         } catch (error) {
@@ -138,7 +126,7 @@ export class categoryService {
                 where: { id: id },
                 data: categoryData,
             });
-            await this.clearCategoryCache(id);
+            await clearCache();
             return updatedCategory;
         } catch (error) {
             if (error instanceof Error) {
@@ -154,7 +142,7 @@ export class categoryService {
             const deletedCategory = await prisma.category.delete({
                 where: { id: id },
             });
-            await this.clearCategoryCache(id);
+            await clearCache();
             return deletedCategory;
         } catch (error) {
             if (error instanceof Error) {

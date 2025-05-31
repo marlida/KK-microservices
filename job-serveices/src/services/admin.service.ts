@@ -3,16 +3,12 @@ import prisma from "../config/db";
 import redisClient from "../config/redis";
 
 export class adminService {
-        private static clearAdminCache = async (id?: number) => {
-        try {
-            await redisClient.del("admins:list");
+    private static clearAdminCache = async () => {
+        await redisClient.del("admin:list");
+    }
 
-            if (id) {
-                await redisClient.del(`admin:${id}`);
-            }
-        } catch (error) {
-            console.error("Error clearing cache:", error);
-        }
+    private static clearAdminCacheById = async (id: number) => {
+        await redisClient.del(`admin:${id}`);
     }
 
     static createAdmin = async (adminData: AdminCreateInput): Promise<Admin> => {
@@ -76,7 +72,7 @@ export class adminService {
                 console.log(`Admin with ID ${id} not found`);
                 return null;
             }
-            
+
             await redisClient.set(`admin:${id}`, JSON.stringify(admin), {
                 EX: 60 * 60, // Cache for 1 hour
             });
@@ -107,34 +103,11 @@ export class adminService {
 
     static updateAdmin = async (id: number, adminData: AdminCreateInput): Promise<Admin> => {
         try {
-
-            const [existingTel, existingName] = await Promise.all([
-                prisma.admin.findFirst({
-                    where: {
-                        tel: adminData.tel,
-                        NOT: { id }
-                    }
-                }),
-                prisma.admin.findFirst({
-                    where: {
-                        name: adminData.name,
-                        NOT: { id }
-                    }
-                })
-            ]);
-
-            if (existingTel) {
-                throw new Error('Phone number already exists');
-            }
-            if (existingName) {
-                throw new Error('Admin with this name already exists');
-            }
-
             const updatedAdmin = await prisma.admin.update({
                 where: { id: id },
                 data: adminData,
             });
-            await this.clearAdminCache(id);
+            await this.clearAdminCacheById(id);
             return updatedAdmin;
         } catch (error) {
             if (error instanceof Error) {
@@ -150,7 +123,7 @@ export class adminService {
             const deletedAdmin = await prisma.admin.delete({
                 where: { id: id },
             });
-            await this.clearAdminCache(id);
+            await this.clearAdminCacheById(id);
             return deletedAdmin;
         } catch (error) {
             if (error instanceof Error) {
@@ -161,3 +134,4 @@ export class adminService {
         }
     }
 }
+

@@ -11,6 +11,14 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
             return;
         }
 
+        const vildationTel = /^\d{10}$/;
+        if (!vildationTel.test(tel)) {
+            res.status(400).json({
+                message: 'Invalid phone number format. It should be 10 digits.',
+            });
+            return;
+        }
+
         const existingUser = await userService.getUserExists(name);
         if (existingUser) {
             res.status(400).json({

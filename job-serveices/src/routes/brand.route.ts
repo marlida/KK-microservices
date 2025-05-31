@@ -4,7 +4,7 @@ import { createBrand, deleteBrand, getBrand, getBrandById, updateBrand } from ".
 const router = Router();
 
 router.get("/brand", getBrand);
-router.get("/brand/:id/:catId", getBrandById);
+router.get("/brand/:id", getBrandById);
 router.post("/brand", createBrand);
 router.put("/brand/:id", updateBrand);
 router.delete("/brand/:id", deleteBrand);

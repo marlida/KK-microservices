@@ -3,8 +3,8 @@ import { productService } from '../services/product.service';
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name, price, serial, description, category, brand} = req.body;
-        if (!name || !price ) {
+        const { name, price, serial, description, categoryId, brandId } = req.body;
+        if (!name || !price) {
             res.status(400).json({
                 message: 'Invalid product data provided',
             });
@@ -19,7 +19,14 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
             return;
         }
 
-        const newProduct = await productService.createProduct({ name, price, serial, description, category, brand });
+        const newProduct = await productService.createProduct({ 
+            name, 
+            price: parseFloat(price), 
+            serial, 
+            description, 
+            categoryId: parseInt(categoryId), 
+            brandId: parseInt(brandId) 
+        });
         res.status(201).json({
             message: 'Product created successfully',
             data: newProduct,

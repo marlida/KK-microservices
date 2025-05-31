@@ -1,28 +1,41 @@
 import { Product, ProductCreateInput } from "../types/product";
 import prisma from "../config/db";
-import redisClient from "../config/redis";
+import redisClient, { clearCache } from "../config/redis";
 
 export class productService {
-    private static clearProductCache = async (id?: number) => {
-        try {
-            await redisClient.del("products:list");
 
-            if (id) {
-                await redisClient.del(`product:${id}`);
+    static createProduct = async (productData: { name?: string; price?: number; serial?: string; description?: string; categoryId?: number; brandId?: number }): Promise<Product> => {
+        try {
+            if (productData.categoryId) {
+                const categoryExists = await prisma.category.findUnique({
+                    where: { id: productData.categoryId }
+                });
+                if (!categoryExists) {
+                    throw new Error(`Category with ID ${productData.categoryId} does not exist`);
+                }
             }
-        } catch (error) {
-            console.error("Error clearing cache:", error);
-        }
-    }
 
-    static createProduct = async (productData: ProductCreateInput): Promise<Product> => {
-        try {
+            if (productData.brandId) {
+                const brandExists = await prisma.brand.findUnique({
+                    where: { id: productData.brandId }
+                });
+                if (!brandExists) {
+                    throw new Error(`Brand with ID ${productData.brandId} does not exist`);
+                }
+            }
 
             const newProduct = await prisma.product.create({
-                data: productData
+                data: {
+                    name: productData.name,
+                    price: productData.price,
+                    serial: productData.serial,
+                    description: productData.description,
+                    categoryId: productData.categoryId,  
+                    brandId: productData.brandId         
+                }
             });
             
-            await this.clearProductCache();
+            await clearCache();
             
             return newProduct;
         } catch (error) {
@@ -126,7 +139,7 @@ export class productService {
                 where: { id: id },
                 data: productData,
             });
-            await this.clearProductCache(id);
+            await clearCache();
             return updatedProduct;
         } catch (error) {
             if (error instanceof Error) {
@@ -142,7 +155,7 @@ export class productService {
             const deletedProduct = await prisma.product.delete({
                 where: { id: id },
             });
-            await this.clearProductCache(id);
+            await clearCache();
             return deletedProduct;
         } catch (error) {
             if (error instanceof Error) {

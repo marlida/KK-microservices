@@ -121,6 +121,14 @@ export const updateAdmin = async (
       return;
     }
 
+    const existingAdmin = await adminService.getAdminExists(name);
+    if (existingAdmin && existingAdmin.id !== parseInt(id)) {
+      res.status(400).json({
+        message: "Admin with this name already exists",
+      });
+      return;
+    }
+
     const updatedAdmin = await adminService.updateAdmin(parseInt(id), {
       name,
       tel,
