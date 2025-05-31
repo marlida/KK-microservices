@@ -15,9 +15,16 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 const routeFiles = glob.sync('./src/routes/**/*.ts');
+console.log('Found route files:', routeFiles);
+
 routeFiles.forEach(async (file) => {
-  const route = await import(path.resolve(file));
-  app.use('/api', route.default);
+  try {
+    const route = await import(path.resolve(file));
+    app.use('/api', route.default);
+    console.log('Route loaded successfully:', file);
+  } catch (error) {
+    console.error('Error loading route:', file, error);
+  }
 });
 
 const port = process.env.PORT;

@@ -1,14 +1,29 @@
 import { Admin, AdminCreateInput } from "../types/admin";
 import prisma from "../config/db";
+import redisClient from "../config/redis";
 
 export class adminService {
+        private static clearAdminCache = async (id?: number) => {
+        try {
+            await redisClient.del("admins:list");
+
+            if (id) {
+                await redisClient.del(`admin:${id}`);
+            }
+        } catch (error) {
+            console.error("Error clearing cache:", error);
+        }
+    }
+
     static createAdmin = async (adminData: AdminCreateInput): Promise<Admin> => {
         try {
             const newAdmin = await prisma.admin.create({
                 data: adminData,
             });
-            return newAdmin;
 
+            await this.clearAdminCache();
+
+            return newAdmin;
         } catch (error) {
             if (error instanceof Error) {
                 throw new Error(`Error creating admin: ${error.message}`);
@@ -20,11 +35,22 @@ export class adminService {
 
     static getAdmin = async (): Promise<Admin[]> => {
         try {
+            const cached = await redisClient.get(`admin:list`);
+
+            if (cached) {
+                console.log("Returning cached admin data");
+                return JSON.parse(cached);
+            }
             const admins = await prisma.admin.findMany({
                 orderBy: {
                     id: 'asc'
                 }
             });
+            // Cache the new admin data
+            await redisClient.set(`admin:list`, JSON.stringify(admins), {
+                EX: 60 * 60, // Cache for 1 hour
+            });
+            console.log("Admin data cached");
             return admins;
         } catch (error) {
             if (error instanceof Error) {
@@ -37,8 +63,22 @@ export class adminService {
 
     static getAdminById = async (id: number): Promise<Admin | null> => {
         try {
+            const cached = await redisClient.get(`admin:${id}`);
+            if (cached) {
+                console.log("Returning cached admin data by ID");
+                return JSON.parse(cached);
+            }
             const admin = await prisma.admin.findUnique({
                 where: { id: id },
+            });
+
+            if (!admin) {
+                console.log(`Admin with ID ${id} not found`);
+                return null;
+            }
+            
+            await redisClient.set(`admin:${id}`, JSON.stringify(admin), {
+                EX: 60 * 60, // Cache for 1 hour
             });
             return admin;
         } catch (error) {
@@ -94,6 +134,7 @@ export class adminService {
                 where: { id: id },
                 data: adminData,
             });
+            await this.clearAdminCache(id);
             return updatedAdmin;
         } catch (error) {
             if (error instanceof Error) {
@@ -109,6 +150,7 @@ export class adminService {
             const deletedAdmin = await prisma.admin.delete({
                 where: { id: id },
             });
+            await this.clearAdminCache(id);
             return deletedAdmin;
         } catch (error) {
             if (error instanceof Error) {
