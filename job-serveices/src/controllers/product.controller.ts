@@ -3,13 +3,15 @@ import { productService } from '../services/product.service';
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { name, price, serial, description, categoryId, brandId } = req.body;
+        const { name, price, quantity, serial, description, categoryId, brandId } = req.body;
         if (!name || !price) {
             res.status(400).json({
                 message: 'Invalid product data provided',
             });
             return;
         }
+
+
 
         const existingProduct = await productService.getProductExists(name);
         if (existingProduct) {
@@ -22,7 +24,8 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
         const newProduct = await productService.createProduct({ 
             name, 
             price: parseFloat(price), 
-            serial, 
+            serial,
+            quantity: parseInt(quantity),
             description, 
             categoryId: parseInt(categoryId), 
             brandId: parseInt(brandId) 

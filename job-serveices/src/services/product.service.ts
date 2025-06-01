@@ -7,11 +7,13 @@ export class productService {
         name?: string;
         price?: number;
         serial?: string;
+        quantity?: number;
         description?: string;
         categoryId?: number;
         brandId?: number;
     }): Promise<Product> => {
         try {
+            
             if (productData.categoryId) {
                 const categoryExists = await prisma.category.findUnique({
                     where: { id: productData.categoryId },
@@ -50,6 +52,7 @@ export class productService {
                     serial: productData.serial,
                     description: productData.description,
                     categoryId: productData.categoryId,
+                    quantity: productData.quantity,
                     brandId: productData.brandId,
                 },
             });

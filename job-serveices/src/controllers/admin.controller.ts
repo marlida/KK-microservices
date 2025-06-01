@@ -9,7 +9,7 @@ export const createAdmin = async (
     const { name, tel } = req.body;
     if (!name || !tel) {
       res.status(400).json({
-        message: "Invalid admin data provided",
+        message: "ข้อมูลผู้ดูแลระบบไม่ถูกต้อง",
       });
       return;
     }
@@ -17,24 +17,24 @@ export const createAdmin = async (
     const existingAdmin = await adminService.getAdminExists(name);
     if (existingAdmin) {
       res.status(400).json({
-        message: "Admin already exists",
+        message: "ผู้ดูแลระบบนี้มีอยู่แล้ว",
       });
       return;
     }
 
     const newAdmin = await adminService.createAdmin({ name, tel });
     res.status(201).json({
-      message: "Admin created successfully",
+      message: "สร้างผู้ดูแลระบบสำเร็จ",
       data: newAdmin,
     });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({
-        message: `Error creating admin: ${error.message}`,
+        message: `เกิดข้อผิดพลาดในการสร้างผู้ดูแลระบบ: ${error.message}`,
       });
     } else {
       res.status(500).json({
-        message: "Error creating admin: Unknown error",
+        message: "เกิดข้อผิดพลาดในการสร้างผู้ดูแลระบบ: ไม่ทราบสาเหตุ",
       });
     }
   }
@@ -44,17 +44,17 @@ export const getAdmin = async (req: Request, res: Response): Promise<void> => {
   try {
     const adminData = await adminService.getAdmin();
     res.status(200).json({
-      message: "Admin data retrieved successfully",
+      message: "ดึงข้อมูลผู้ดูแลระบบสำเร็จ",
       data: adminData,
     });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({
-        message: `Error retrieving admin data: ${error.message}`,
+        message: `เกิดข้อผิดพลาดในการดึงข้อมูลผู้ดูแลระบบ: ${error.message}`,
       });
     } else {
       res.status(500).json({
-        message: "Error retrieving admin data: Unknown error",
+        message: "เกิดข้อผิดพลาดในการดึงข้อมูลผู้ดูแลระบบ: ไม่ทราบสาเหตุ",
       });
     }
   }
@@ -68,7 +68,7 @@ export const getAdminById = async (
     const { id } = req.params;
     if (!id) {
       res.status(400).json({
-        message: "Admin ID is required",
+        message: "กรุณาระบุรหัสผู้ดูแลระบบ",
       });
       return;
     }
@@ -76,23 +76,23 @@ export const getAdminById = async (
     const adminData = await adminService.getAdminById(parseInt(id));
     if (!adminData) {
       res.status(404).json({
-        message: "Admin not found",
+        message: "ไม่พบผู้ดูแลระบบ",
       });
       return;
     }
 
     res.status(200).json({
-      message: "Admin data retrieved successfully",
+      message: "ดึงข้อมูลผู้ดูแลระบบสำเร็จ",
       data: adminData,
     });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({
-        message: `Error retrieving admin data: ${error.message}`,
+        message: `เกิดข้อผิดพลาดในการดึงข้อมูลผู้ดูแลระบบ: ${error.message}`,
       });
     } else {
       res.status(500).json({
-        message: "Error retrieving admin data: Unknown error",
+        message: "เกิดข้อผิดพลาดในการดึงข้อมูลผู้ดูแลระบบ: ไม่ทราบสาเหตุ",
       });
     }
   }
@@ -108,7 +108,7 @@ export const updateAdmin = async (
 
     if (!id || !name || !tel) {
       res.status(400).json({
-        message: "Invalid admin data provided",
+        message: "ข้อมูลผู้ดูแลระบบไม่ถูกต้อง",
       });
       return;
     }
@@ -116,7 +116,7 @@ export const updateAdmin = async (
     const adminNotFound = await adminService.getAdminById(parseInt(id));
     if (!adminNotFound) {
       res.status(404).json({
-        message: "Admin not found",
+        message: "ไม่พบผู้ดูแลระบบ",
       });
       return;
     }
@@ -124,7 +124,7 @@ export const updateAdmin = async (
     const existingAdmin = await adminService.getAdminExists(name);
     if (existingAdmin && existingAdmin.id !== parseInt(id)) {
       res.status(400).json({
-        message: "Admin with this name already exists",
+        message: "มีผู้ดูแลระบบชื่อนี้อยู่แล้ว",
       });
       return;
     }
@@ -134,17 +134,17 @@ export const updateAdmin = async (
       tel,
     });
     res.status(200).json({
-      message: "Admin updated successfully",
+      message: "แก้ไขข้อมูลผู้ดูแลระบบสำเร็จ",
       data: updatedAdmin,
     });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({
-        message: `Error updating admin: ${error.message}`,
+        message: `เกิดข้อผิดพลาดในการแก้ไขข้อมูลผู้ดูแลระบบ: ${error.message}`,
       });
     } else {
       res.status(500).json({
-        message: "Error updating admin: Unknown error",
+        message: "เกิดข้อผิดพลาดในการแก้ไขข้อมูลผู้ดูแลระบบ: ไม่ทราบสาเหตุ",
       });
     }
   }
@@ -158,24 +158,24 @@ export const deleteAdmin = async (
     const { id } = req.params;
     if (!id) {
       res.status(400).json({
-        message: "Admin ID is required",
+        message: "กรุณาระบุรหัสผู้ดูแลระบบ",
       });
       return;
     }
 
     const deletedAdmin = await adminService.deleteAdmin(parseInt(id));
     res.status(200).json({
-      message: "Admin deleted successfully",
+      message: "ลบผู้ดูแลระบบสำเร็จ",
       data: deletedAdmin,
     });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({
-        message: `Error deleting admin: ${error.message}`,
+        message: `เกิดข้อผิดพลาดในการลบผู้ดูแลระบบ: ${error.message}`,
       });
     } else {
       res.status(500).json({
-        message: "Error deleting admin: Unknown error",
+        message: "เกิดข้อผิดพลาดในการลบผู้ดูแลระบบ: ไม่ทราบสาเหตุ",
       });
     }
   }

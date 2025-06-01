@@ -19,7 +19,7 @@ export const createOrder = async (
         } = req.body;
         if (!name || !adminId || !productId) {
             res.status(400).json({
-                message: "Invalid order data provided",
+                message: "ข้อมูลออเดอร์ไม่ถูกต้อง",
             });
             return;
         }
@@ -27,7 +27,7 @@ export const createOrder = async (
         const existingOrder = await orderService.getOrderExists(name);
         if (existingOrder) {
             res.status(400).json({
-                message: "Order already exists",
+                message: "มีออเดอร์นี้อยู่แล้ว",
             });
             return;
         }
@@ -37,27 +37,30 @@ export const createOrder = async (
             adminId: parseInt(adminId),
             productId: parseInt(productId),
             status,
-            customer_issue, 
+            customer_issue,
             technician_issue,
             deposit: parseFloat(deposit),
             total: parseFloat(total),
         });
 
         if (newOrder) {
-            await orderService.decreaseProductQuantity(parseInt(productId), parseInt(quantity));
+            await orderService.decreaseProductQuantity(
+                parseInt(productId),
+                parseInt(quantity)
+            );
         }
         res.status(201).json({
-            message: "Order created successfully",
+            message: "สร้างออเดอร์สำเร็จ",
             data: newOrder,
         });
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({
-                message: `Error creating order: ${error.message}`,
+                message: `เกิดข้อผิดพลาดในการสร้างออเดอร์: ${error.message}`,
             });
         } else {
             res.status(500).json({
-                message: "Error creating order: Unknown error",
+                message: "เกิดข้อผิดพลาดในการสร้างออเดอร์: ไม่ทราบสาเหตุ",
             });
         }
     }
@@ -67,17 +70,17 @@ export const getOrder = async (req: Request, res: Response): Promise<void> => {
     try {
         const orderData = await orderService.getOrder();
         res.status(200).json({
-            message: "Order data retrieved successfully",
+            message: "ดึงข้อมูลออเดอร์สำเร็จ",
             data: orderData,
         });
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({
-                message: `Error retrieving order data: ${error.message}`,
+                message: `เกิดข้อผิดพลาดในการดึงข้อมูลออเดอร์: ${error.message}`,
             });
         } else {
             res.status(500).json({
-                message: "Error retrieving order data: Unknown error",
+                message: "เกิดข้อผิดพลาดในการดึงข้อมูลออเดอร์: ไม่ทราบสาเหตุ",
             });
         }
     }
@@ -91,7 +94,7 @@ export const getOrderById = async (
         const { id } = req.params;
         if (!id) {
             res.status(400).json({
-                message: "Order ID is required",
+                message: "กรุณาระบุรหัสออเดอร์",
             });
             return;
         }
@@ -99,23 +102,23 @@ export const getOrderById = async (
         const orderData = await orderService.getOrderById(parseInt(id));
         if (!orderData) {
             res.status(404).json({
-                message: "Order not found",
+                message: "ไม่พบออเดอร์",
             });
             return;
         }
 
         res.status(200).json({
-            message: "Order data retrieved successfully",
+            message: "ดึงข้อมูลออเดอร์สำเร็จ",
             data: orderData,
         });
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({
-                message: `Error retrieving order data: ${error.message}`,
+                message: `เกิดข้อผิดพลาดในการดึงข้อมูลออเดอร์: ${error.message}`,
             });
         } else {
             res.status(500).json({
-                message: "Error retrieving order data: Unknown error",
+                message: "เกิดข้อผิดพลาดในการดึงข้อมูลออเดอร์: ไม่ทราบสาเหตุ",
             });
         }
     }
@@ -127,11 +130,20 @@ export const updateOrder = async (
 ): Promise<void> => {
     try {
         const { id } = req.params;
-        const { name, admin } = req.body;
+        const {
+            name,
+            adminId,
+            productId,
+            status,
+            customer_issue,
+            technician_issue,
+            deposit,
+            total,
+        } = req.body;
 
-        if (!id || !name || !admin) {
+        if (!id || !name || !adminId || !productId) {
             res.status(400).json({
-                message: "Invalid order data provided",
+                message: "ข้อมูลออเดอร์ไม่ถูกต้อง",
             });
             return;
         }
@@ -139,7 +151,7 @@ export const updateOrder = async (
         const orderNotFound = await orderService.getOrderById(parseInt(id));
         if (!orderNotFound) {
             res.status(404).json({
-                message: "Order not found",
+                message: "ไม่พบออเดอร์",
             });
             return;
         }
@@ -147,27 +159,36 @@ export const updateOrder = async (
         const existingOrder = await orderService.getOrderExists(name);
         if (existingOrder && existingOrder.id !== parseInt(id)) {
             res.status(400).json({
-                message: "Order with this name already exists",
+                message: "มีออเดอร์ชื่อนี้อยู่แล้ว",
             });
             return;
         }
 
-        const updatedOrder = await orderService.updateOrder(parseInt(id), {
-            name,
-            admin,
-        });
+        const updatedOrder = await orderService.updateOrder(
+            { id: parseInt(id) },
+            {
+                name,
+                adminId: parseInt(adminId),
+                productId: parseInt(productId),
+                status,
+                customer_issue,
+                technician_issue,
+                deposit: parseFloat(deposit),
+                total: parseFloat(total),
+            }
+        );
         res.status(200).json({
-            message: "Order updated successfully",
+            message: "แก้ไขออเดอร์สำเร็จ",
             data: updatedOrder,
         });
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({
-                message: `Error updating order: ${error.message}`,
+                message: `เกิดข้อผิดพลาดในการแก้ไขออเดอร์: ${error.message}`,
             });
         } else {
             res.status(500).json({
-                message: "Error updating order: Unknown error",
+                message: "เกิดข้อผิดพลาดในการแก้ไขออเดอร์: ไม่ทราบสาเหตุ",
             });
         }
     }
@@ -181,24 +202,24 @@ export const deleteOrder = async (
         const { id } = req.params;
         if (!id) {
             res.status(400).json({
-                message: "Order ID is required",
+                message: "กรุณาระบุรหัสออเดอร์",
             });
             return;
         }
 
         const deletedOrder = await orderService.deleteOrder(parseInt(id));
         res.status(200).json({
-            message: "Order deleted successfully",
+            message: "ลบออเดอร์สำเร็จ",
             data: deletedOrder,
         });
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({
-                message: `Error deleting order: ${error.message}`,
+                message: `เกิดข้อผิดพลาดในการลบออเดอร์: ${error.message}`,
             });
         } else {
             res.status(500).json({
-                message: "Error deleting order: Unknown error",
+                message: "เกิดข้อผิดพลาดในการลบออเดอร์: ไม่ทราบสาเหตุ",
             });
         }
     }

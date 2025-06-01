@@ -3,7 +3,6 @@ import prisma from "../config/db";
 import redisClient, { clearRelatedProductCache } from "../config/redis";
 
 export class orderService {
-
     static decreaseProductQuantity = async (
         productId: number,
         quantity: number
@@ -23,12 +22,16 @@ export class orderService {
 
             await prisma.product.update({
                 where: { id: productId },
-                data: { quantity: product.quantity - quantity, sold: (product.sold ?? 0) + quantity },
+                data: {
+                    quantity: product.quantity - quantity,
+                    sold: (product.sold ?? 0) + quantity,
+                },
             });
-
         } catch (error) {
             if (error instanceof Error) {
-                throw new Error(`Error decreasing product quantity: ${error.message}`);
+                throw new Error(
+                    `Error decreasing product quantity: ${error.message}`
+                );
             }
             throw new Error("Error decreasing product quantity: Unknown error");
         }
@@ -111,7 +114,7 @@ export class orderService {
                 include: {
                     product: true,
                     admin: true,
-                }
+                },
             });
 
             if (!order) {
@@ -157,8 +160,17 @@ export class orderService {
     };
 
     static updateOrder = async (
-        id: number,
-        orderData: OrderCreateInput
+        { id }: { id: number },
+        orderData: {
+            name: string;
+            adminId: number;
+            productId: number;
+            status: string;
+            customer_issue: string;
+            technician_issue: string;
+            deposit: number;
+            total: number;
+        }
     ): Promise<Order> => {
         try {
             const existingOrderName = await prisma.order.findFirst({
