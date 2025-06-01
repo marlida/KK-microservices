@@ -1,129 +1,148 @@
 import type { Order } from "@/types/types";
+import { useState } from "react";
+import { updateOrder, deleteOrder } from "@/services/ServiceOrder";
+import { OrderTable, OrderModal } from "./OrderDetail";
 
 interface OrderProps {
 	activeTab: string;
 	orders: Order[];
+	onOrderUpdate?: () => void;
 }
 
-const OrderComponent = ({ activeTab, orders }: OrderProps) => {
-	// Add safety check for orders array
+const OrderComponent = ({ activeTab, orders, onOrderUpdate }: OrderProps) => {
 	const safeOrders = Array.isArray(orders) ? orders : [];
+	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isClosing, setIsClosing] = useState(false);
+	const [isEditMode, setIsEditMode] = useState(false);
+	const [editData, setEditData] = useState<Partial<Order>>({});
+	const [isLoading, setIsLoading] = useState(false);
 
-	const getStatusColor = (status: string) => {
-		switch (status) {
-			case "ซ่อมเสร็จแล้ว":
-				return "bg-green-100 text-green-800";
-			case "กำลังดำเนินการ":
-				return "bg-blue-100 text-blue-800";
-			case "รอดำเนินการ":
-				return "bg-yellow-100 text-yellow-800";
-			default:
-				return "bg-gray-100 text-gray-800";
+	const handleOrderClick = (order: Order) => {
+		console.log("Selected order data:", order);
+		console.log("adminId:", order.adminId);
+		console.log("productId:", order.productId);
+		console.log("admin object:", order.admin);
+		console.log("product object:", order.product);
+
+		setSelectedOrder(order);
+		setEditData({
+			name: order.name,
+			status: order.status,
+			customer_issue: order.customer_issue,
+			technician_issue: order.technician_issue,
+			deposit: order.deposit,
+			total: order.total,
+		});
+		setIsModalOpen(true);
+		setIsClosing(false);
+		setIsEditMode(false);
+	};
+
+	// Function to toggle edit mode
+	const toggleEditMode = () => {
+		setIsEditMode(!isEditMode);
+	};
+
+	// Function to handle input changes
+	const handleInputChange = (field: string, value: string | number) => {
+		setEditData((prev) => ({
+			...prev,
+			[field]: value,
+		}));
+	}; // Function to save changes
+	const handleSave = async () => {
+		if (!selectedOrder) return;
+		try {
+			setIsLoading(true);
+
+			// Prepare update data exactly as API expects
+			const updateData = {
+				name: editData.name || selectedOrder.name,
+				adminId: selectedOrder.adminId,
+				productId: selectedOrder.productId,
+				status: editData.status || selectedOrder.status,
+				customer_issue: editData.customer_issue || selectedOrder.customer_issue,
+				technician_issue: editData.technician_issue || selectedOrder.technician_issue,
+				deposit: editData.deposit || selectedOrder.deposit,
+				total: editData.total || selectedOrder.total,
+			};
+
+			console.log("Sending update data:", updateData);
+			console.log("Order ID parameter:", selectedOrder.id);
+
+			await updateOrder(selectedOrder.id, updateData);
+
+			setSelectedOrder((prev) => (prev ? { ...prev, ...editData } : null));
+			setIsEditMode(false);
+			if (onOrderUpdate) {
+				onOrderUpdate();
+			}
+
+			alert("บันทึกข้อมูลสำเร็จ");
+		} catch (error) {
+			console.error("Error updating order:", error);
+			alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
+	// Function to handle delete order
+	const handleDelete = async () => {
+		if (!selectedOrder) return;
+
+		const confirmDelete = window.confirm(
+			`คุณต้องการลบออเดอร์ #${selectedOrder.id} ใช่หรือไม่?`,
+		);
+		if (!confirmDelete) return;
+
+		try {
+			setIsLoading(true);
+			await deleteOrder(selectedOrder.id);
+
+			if (onOrderUpdate) {
+				onOrderUpdate();
+			}
+
+			closeModal();
+			alert("ลบออเดอร์สำเร็จ");
+		} catch (error) {
+			console.error("Error deleting order:", error);
+			alert("เกิดข้อผิดพลาดในการลบออเดอร์");
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	// Function to close modal
+	const closeModal = () => {
+		setIsClosing(true);
+		setTimeout(() => {
+			setIsModalOpen(false);
+			setSelectedOrder(null);
+			setIsClosing(false);
+		}, 300);
+	};
 	return (
 		<div>
 			{activeTab === "orders" && (
-				<div className="bg-white rounded-lg shadow overflow-hidden">
-					<div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-						<h2 className="text-lg font-medium text-gray-900 flex items-center gap-2">
-							<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-							</svg>
-							ประวัติการซ่อม
-						</h2>
-					</div>
-					<div className="overflow-x-auto">
-						<table className="w-full">
-							<thead className="bg-gray-50">
-								<tr>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										รหัสออเดอร์
-									</th>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										ชื่อลูกค้า
-									</th>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										แอดมิน
-									</th>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										สินค้า
-									</th>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										สถานะ
-									</th>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										ปัญหาที่ลูกค้าแจ้ง
-									</th>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										หมายเหตุช่าง
-									</th>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										เงินมัดจำ
-									</th>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										ราคารวม
-									</th>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										วันที่สร้าง
-									</th>
-								</tr>
-							</thead>
-							<tbody className="bg-white divide-y divide-gray-200">
-								{safeOrders.length > 0 ? (
-									safeOrders.map((order) => (
-										<tr key={order.id} className="hover:bg-gray-50 cursor-pointer">
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-												{order.id}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-												{order.name}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-												{order.admin?.name || 'ไม่ระบุ'}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-												{order.product?.name || 'ไม่ระบุ'}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap">
-												<span
-													className={`px-2 py-1 text-xs rounded-full ${getStatusColor(
-														order.status
-													)}`}>
-													{order.status}
-												</span>
-											</td>
-											<td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
-												{order.customer_issue}
-											</td>
-											<td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
-												{order.technician_issue}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-												฿{order.deposit?.toLocaleString()}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-												฿{order.total?.toLocaleString()}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-												{new Date(order.createdAt).toLocaleDateString("th-TH")}
-											</td>
-										</tr>
-									))
-								) : (
-									<tr>
-										<td
-											colSpan={10}
-											className="px-6 py-4 text-center text-sm text-gray-500">
-											ไม่พบข้อมูลการซ่อม
-										</td>
-									</tr>
-								)}
-							</tbody>
-						</table>
-					</div>
-				</div>
+				<OrderTable orders={safeOrders} onOrderClick={handleOrderClick} />
+			)}{" "}
+			{selectedOrder && (
+				<OrderModal
+					selectedOrder={selectedOrder}
+					editData={editData}
+					isModalOpen={isModalOpen}
+					isClosing={isClosing}
+					isEditMode={isEditMode}
+					isLoading={isLoading}
+					onInputChange={handleInputChange}
+					onToggleEditMode={toggleEditMode}
+					onSave={handleSave}
+					onDelete={handleDelete}
+					onClose={closeModal}
+				/>
 			)}
 		</div>
 	);

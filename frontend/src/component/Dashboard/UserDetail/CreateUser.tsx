@@ -18,13 +18,13 @@ export default function CreateUser({
   return (
     <div>
         {showModal && (
-						<div className="fixed inset-0 bg-black/10 bg-opacity-50 flex items-center justify-center z-50">
+						<div className="fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center z-50">
 							<div className="bg-white p-6 rounded-lg w-96 max-w-lg mx-4">
 								<div className="flex justify-between items-center mb-4">
 									<h3 className="text-lg font-medium text-gray-900">เพิ่มผู้ใช้ใหม่</h3>
 									<button
 										onClick={closeModal}
-										className="text-gray-400 hover:text-gray-600"
+										className="text-gray-400 hover:text-gray-600 cursor-pointer transition"
 									>
 										<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -67,14 +67,14 @@ export default function CreateUser({
 										<button
 											type="button"
 											onClick={closeModal}
-											className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+											className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 cursor-pointer transition"
 										>
 											ยกเลิก
 										</button>
 										<button
 											type="submit"
 											disabled={isSubmitting}
-											className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors"
+											className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 cursor-pointer transition"
 										>
 											{isSubmitting ? "กำลังเพิ่ม..." : "เพิ่มผู้ใช้"}
 										</button>

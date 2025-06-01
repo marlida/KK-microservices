@@ -19,18 +19,32 @@ export default function SearchFilter({
 }: SearchFilterProps) {
 	return (
 		<div className="p-4 border-b border-gray-200">
-			<div className="flex gap-4 items-center">
-				<input
-					type="text"
-					placeholder="ค้นหาด้วยชื่อหรือเบอร์โทร..."
-					value={searchTerm}
-					onChange={(e) => setSearchTerm(e.target.value)}
-					className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-				/>
+			<div className="flex gap-3 items-center">
+				<div className="relative flex-1">
+					<svg
+						className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24">
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+						/>
+					</svg>
+					<input
+						type="text"
+						placeholder="ค้นหา..."
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+						className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300 transition-colors"
+					/>
+				</div>
 				<select
 					value={dateFilter}
 					onChange={(e) => setDateFilter(e.target.value)}
-					className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+					className="px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300 bg-white cursor-pointer min-w-[120px]">
 					<option value="">ทั้งหมด</option>
 					<option value="today">วันนี้</option>
 					<option value="week">สัปดาห์นี้</option>

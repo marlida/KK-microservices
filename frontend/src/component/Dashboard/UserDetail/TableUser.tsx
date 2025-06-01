@@ -5,7 +5,7 @@ import { useState } from "react";
 interface TableUserProps {
 	safeUsers: User[];
 	setShowModal: (show: boolean) => void;
-	onUserDeleted?: () => void; // Callback to refresh user list after deletion
+	onUserDeleted?: () => void;
 }
 
 export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: TableUserProps) {
@@ -74,7 +74,6 @@ export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: Ta
 				setEditingUser(null);
 				setSuccessMessage("อัปเดตข้อมูลผู้ใช้สำเร็จ");
 
-				// Clear success message after 3 seconds
 				setTimeout(() => {
 					setSuccessMessage("");
 				}, 3000);
@@ -82,7 +81,6 @@ export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: Ta
 		} catch (error: unknown) {
 			console.error("Error updating user:", error);
 
-			// Set user-friendly error message
 			if (error && typeof error === "object" && "response" in error) {
 				const axiosError = error as { response?: { status?: number } };
 				if (axiosError.response?.status === 404) {
@@ -235,38 +233,53 @@ export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: Ta
 					</button>
 				</div>
 			)}
+			{/* User Table */}
 			<table className="w-full">
-				<thead className="bg-gray-50">
+				<thead className="bg-gray-50 border-b border-gray-200">
 					<tr>
-						<th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+						<th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
 							ID
 						</th>
-						<th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+						<th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
 							ชื่อผู้ใช้
 						</th>
-						<th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+						<th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
 							เบอร์โทร
 						</th>
-						<th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+						<th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
 							วันที่สมัคร
 						</th>
-						<th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">
+						<th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
 							จัดการ
 						</th>
 					</tr>
 				</thead>
+
 				<tbody className="bg-white divide-y divide-gray-200">
 					{safeUsers.length > 0 ? (
 						safeUsers.map((user, index) => (
-							<tr key={user.id} className="hover:bg-gray-50">
+							<tr key={user.id} className="hover:bg-gray-50 cursor-pointer">
 								<td className="px-4 py-3 text-sm font-medium text-gray-900">
-									#{index + 1}
+									<div className="flex items-center">
+										<span className="text-gray-800 font-medium">
+											{index + 1}
+										</span>
+									</div>
 								</td>
 								<td className="px-4 py-3">
 									<div className="flex items-center">
-										<div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center mr-3">
+										<div
+											className={`h-8 w-8 rounded-full flex items-center justify-center mr-3 ${
+												index % 4 === 0
+													? "bg-blue-500"
+													: index % 4 === 1
+													? "bg-green-500"
+													: index % 4 === 2
+													? "bg-purple-500"
+													: "bg-orange-500"
+											}`}>
 											<span className="text-white text-xs font-medium">
-												{user.name.charAt(0).toUpperCase()}
+												{user.name.charAt(3).toUpperCase()}
 											</span>
 										</div>
 										{editingUser === user.id.toString() ? (
@@ -279,7 +292,7 @@ export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: Ta
 														name: e.target.value,
 													}))
 												}
-												className="text-sm border rounded px-2 py-1 focus:outline-none"
+												className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-gray-300"
 												autoFocus
 											/>
 										) : (
@@ -298,7 +311,7 @@ export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: Ta
 													tel: e.target.value,
 												}))
 											}
-											className="text-sm border rounded px-2 py-1"
+											className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-gray-300"
 										/>
 									) : (
 										user.tel
@@ -316,7 +329,7 @@ export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: Ta
 														handleSaveClick(user.id.toString())
 													}
 													disabled={isLoading}
-													className="text-green-600 hover:text-green-900 p-1 disabled:opacity-50"
+													className="text-green-600 hover:text-green-900 p-1 disabled:opacity-50 cursor-pointer"
 													title="บันทึก">
 													{isLoading ? (
 														<svg
@@ -349,7 +362,7 @@ export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: Ta
 												<button
 													onClick={handleCancelEdit}
 													disabled={isLoading}
-													className="text-red-600 hover:text-red-900 p-1"
+													className="text-red-600 hover:text-red-900 p-1 cursor-pointer"
 													title="ยกเลิก">
 													<svg
 														className="w-4 h-4"
@@ -369,7 +382,7 @@ export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: Ta
 											<>
 												<button
 													onClick={() => handleEditClick(user)}
-													className="text-blue-600 hover:text-blue-900 p-1"
+													className="text-blue-600 hover:text-blue-900 p-1 cursor-pointer"
 													title="แก้ไข">
 													<svg
 														className="w-4 h-4"
@@ -388,7 +401,7 @@ export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: Ta
 													onClick={() =>
 														handleDeleteClick(user.id.toString())
 													}
-													className="text-red-600 hover:text-red-900 p-1"
+													className="text-red-600 hover:text-red-900 p-1 cursor-pointer"
 													title="ลบ">
 													<svg
 														className="w-4 h-4"
@@ -436,20 +449,36 @@ export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: Ta
 						</tr>
 					)}
 				</tbody>
-			</table>{" "}
+			</table>
 			{/* Delete Confirmation Modal */}
 			{showDeleteConfirm && (
-				<div className="fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center z-50">
-					<div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full mx-4">
-						<h3 className="text-lg font-semibold mb-4">ยืนยันการลบผู้ใช้</h3>
-						<p className="text-sm text-gray-700 mb-4">
-							คุณแน่ใจหรือว่าต้องการลบผู้ใช้คนนี้? การกระทำนี้ไม่สามารถย้อนคืนได้
-						</p>
-						<div className="flex justify-end gap-2">
+				<div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+					<div className="bg-white rounded-lg shadow-xl p-6 max-w-sm mx-4">
+						<div className="text-center">
+							<div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+								<svg
+									className="h-6 w-6 text-red-600"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24">
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+									/>
+								</svg>
+							</div>
+							<h3 className="text-lg font-medium text-gray-900 mb-2">ลบผู้ใช้</h3>
+							<p className="text-sm text-gray-500 mb-6">
+								การกระทำนี้ไม่สามารถย้อนกลับได้
+							</p>
+						</div>
+						<div className="flex gap-3">
 							<button
 								onClick={() => handleConfirmDelete(showDeleteConfirm)}
 								disabled={deletingUserId === showDeleteConfirm}
-								className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50">
+								className="flex-1 bg-red-600 text-white py-2 rounded-md hover:bg-red-700 disabled:opacity-50 flex items-center justify-center cursor-pointer transition duration-300">
 								{deletingUserId === showDeleteConfirm ? (
 									<svg
 										className="w-4 h-4 animate-spin"
@@ -464,13 +493,13 @@ export default function TableUser({ safeUsers, setShowModal, onUserDeleted }: Ta
 										/>
 									</svg>
 								) : (
-									"ลบผู้ใช้"
+									"ลบ"
 								)}
 							</button>
 							<button
 								onClick={handleCancelDelete}
 								disabled={deletingUserId === showDeleteConfirm}
-								className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 disabled:opacity-50">
+								className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 disabled:opacity-50 cursor-pointer transition duration-300">
 								ยกเลิก
 							</button>
 						</div>

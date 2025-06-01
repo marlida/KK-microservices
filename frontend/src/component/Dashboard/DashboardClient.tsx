@@ -93,8 +93,8 @@ export default function DashboardClient({
             </div>
 
 			{/* Navigation Tabs with Refresh Button */}
-			<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-				<nav className="flex flex-wrap gap-2">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <nav className="flex flex-wrap gap-5">
                     {[
                         { id: "orders", label: "ประวัติการซ่อม" },
                         { id: "users", label: "ลูกค้า" },
@@ -105,34 +105,34 @@ export default function DashboardClient({
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`px-4 py-2 rounded-sm transition-colors cursor-pointer ${
+                            className={`px-4 py-2 border rounded-sm text-sm font-medium transition-all duration-200 cursor-pointer ${
                                 activeTab === tab.id
-                                    ? "bg-blue-500 text-white"
-                                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                                    ? "bg-slate-900 text-white shadow-sm"
+                                    : "text-slate-600 border-slate-200"
                             }`}>
                             {tab.label}
                         </button>
                     ))}
-				</nav>
+                </nav>
 
-				<button
-					onClick={handleRefresh}
-					className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xs hover:from-green-600 hover:to-green-700 transition duration-500 transform shadow-sm hover:shadow-xl flex items-center gap-3 font-medium text-sm cursor-pointer">
-					<svg
-						className="w-5 h-5 animate-spin-on-hover"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24">
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth={2}
-							d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-						/>
-					</svg>
-					<span>Refresh Data</span>
-				</button>
-			</div>
+                <button
+                    onClick={handleRefresh}
+                    className="px-4 py-2 text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-all duration-200 flex items-center gap-2 font-medium text-sm cursor-pointer">
+                    <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        />
+                    </svg>
+                    <span>รีเฟรช</span>
+                </button>
+            </div>
 
 			{/* Component Tables */}
 			<OrderComponent activeTab={activeTab} orders={orders} />

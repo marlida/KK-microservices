@@ -6,7 +6,7 @@ import SearchTerm from "./UserDetail/SearchTerm";
 import TableUser from "./UserDetail/TableUser";
 import Pagination from "./UserDetail/Pagination";
 import UserHeader from "./UserDetail/UserHeader";
-import axios from "axios";
+import { createUser } from "@/services/ServiceUser";
 
 interface UserProps {
 	activeTab: string;
@@ -75,18 +75,12 @@ export default function UserComponent({ activeTab, users }: UserProps) {
 		setDateFilter(filter);
 		setCurrentPage(1);
 	};
-
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setIsSubmitting(true);
 
 		try {
-			await axios.post("http://172.20.10.4:8000/jobs/user", formData, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-
+			await createUser(formData);
 			setFormData({ name: "", tel: "" });
 			setShowModal(false);
 			window.location.reload();

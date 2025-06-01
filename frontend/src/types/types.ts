@@ -6,6 +6,8 @@ export interface Order {
   technician_issue: string
   deposit: number
   total: number
+  adminId?: number
+  productId?: number
   createdAt: string
   updatedAt: string
   admin?: { name: string }

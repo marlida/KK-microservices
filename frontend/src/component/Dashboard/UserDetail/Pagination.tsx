@@ -38,7 +38,7 @@ export default function Pagination({
 				<button
 					onClick={handlePrevPage}
 					disabled={currentPage <= 1}
-					className="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+					className="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
 					ก่อนหน้า
 				</button>
 				<span className="px-3 py-1 bg-blue-600 text-white rounded text-sm">
@@ -47,7 +47,7 @@ export default function Pagination({
 				<button
 					onClick={handleNextPage}
 					disabled={currentPage >= totalPages}
-					className="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+					className="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
 					ถัดไป
 				</button>
 			</div>
