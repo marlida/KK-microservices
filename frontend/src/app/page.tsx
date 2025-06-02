@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import HeroBanner from "./components/Home/HeroBanner";
 import DataOverview from "./components/Home/DataOverview";
 import useAdminStore from "@/store/adminStore";
@@ -10,7 +10,6 @@ import useAdminStore from "@/store/adminStore";
 // import useUserStore from "@/store/userStore";
 
 export default function Home() {
-	const [isOpen, setIsOpen] = useState(false);
 	const fetchAllData = async () => {
 		await Promise.all([
 			useAdminStore.getState().fetchAdmins(),
@@ -26,19 +25,17 @@ export default function Home() {
 	}, []);
 
 	return (
-		<div className="relative">
-			<div
-				className={`transition-opacity duration-500 ${
-					isOpen ? "opacity-0" : "opacity-100"
-				}`}>
-				<HeroBanner setIsOpen={setIsOpen} />
-			</div>
-			<div
-				className={`fixed inset-0 flex items-center justify-center z-40 transition-opacity duration-500 w-screen mt-20 ${
-					isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-				}`}>
-				<DataOverview isOpen={isOpen} />
-			</div>
+		<div className="relative w-full h-auto">
+			<section
+				id="hero"
+				className={`transition-all duration-500 transform`}>
+				<HeroBanner />
+			</section>
+			<section
+				id="overview"
+				className={`relative w-full h-auto transition-opacity duration-500`}>
+				<DataOverview/>
+			</section>
 		</div>
 	);
 }

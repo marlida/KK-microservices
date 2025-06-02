@@ -1,15 +1,16 @@
 import { create } from "zustand";
 import { Admin } from "../types/Admin";
-import axios from "axios";
+import * as adminAPI from "@/app/api/admin";
 
 interface AdminState {
 	admins: {
 		data: Admin[];
 		message: string;
 	};
-	addAdmin: (admin: Admin) => void;
-	removeAdmin: (id: number) => void;
+	removeAdmin: (id: number) => Promise<void>;
 	fetchAdmins: () => Promise<void>;
+	updateAdmin: (id: number, updatedAdmin: Admin) => Promise<void>;
+	createAdmin: (adminData: Admin) => Promise<void>;
 }
 
 const useAdminStore = create<AdminState>((set) => ({
@@ -17,29 +18,59 @@ const useAdminStore = create<AdminState>((set) => ({
 		data: [],
 		message: "",
 	},
-	addAdmin: (admin) =>
-		set((state) => ({ admins: { ...state.admins, data: [...state.admins.data, admin] } })),
-	removeAdmin: (id) =>
-		set((state) => ({
-			admins: { ...state.admins, data: state.admins.data.filter((admin) => admin.id !== id) },
-		})),
-	fetchAdmins: async () => {
+	removeAdmin: async (id) => {
 		try {
-			const response = await axios.get("http://localhost:8000/jobs/admin"); // ดึงข้อมูลจาก API ด้วย axios
-			const { data, message } = response.data;
-			set({ admins: { data, message } }); // อัปเดต state
+			const { message } = await adminAPI.deleteAdmin(id);
+			set((state) => ({
+				admins: {
+					...state.admins,
+					data: state.admins.data.filter((admin) => admin.id !== id),
+					message,
+				},
+			}));
 		} catch (error) {
-			console.error("Failed to fetch admins:", error); // แสดงข้อผิดพลาด
+			console.error("❌ Failed to remove admin:", error);
 		}
 	},
-	createAdmin: async () => {
-		try {
-			const response = await axios.post("http://localhost:8000/jobs/admin");
 
-			const { message } = response.data;
-			set((state) => ({ admins: { ...state.admins, message } }));
+	fetchAdmins: async () => {
+		try {
+			const { data = [], message = "" } = await adminAPI.fetchAdmins();
+			set({ admins: { data, message } });
 		} catch (error) {
-			console.error("Failed to creat formAdmin:", error);
+			console.error("❌ Failed to fetch admins:", error);
+		}
+	},
+
+	createAdmin: async (adminData) => {
+		try {
+			const { data, message } = await adminAPI.createAdmin(adminData);
+			set((state) => ({
+				admins: {
+					...state.admins,
+					data: [...state.admins.data, data],
+					message,
+				},
+			}));
+		} catch (error) {
+			console.error("❌ Failed to create admin:", error);
+		}
+	},
+
+	updateAdmin: async (id, updatedAdmin) => {
+		try {
+			const { message } = await adminAPI.updateAdmin(id, updatedAdmin);
+			set((state) => ({
+				admins: {
+					...state.admins,
+					data: state.admins.data.map((admin) =>
+						admin.id === id ? { ...admin, ...updatedAdmin } : admin,
+					),
+					message,
+				},
+			}));
+		} catch (error) {
+			console.error("❌ Failed to update admin:", error);
 		}
 	},
 }));

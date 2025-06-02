@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
+import { IBM_Plex_Sans_Thai_Looped } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
+import { ToastContainer } from 'react-toastify';
+
+const ibmPlexSansThai = IBM_Plex_Sans_Thai_Looped({
+	subsets: ["latin", "thai"],
+	weight: ["100", "200", "300", "400", "500", "600", "700"],
+	variable: "--font-ibm-plex-sans-thai",
+});
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -13,15 +21,11 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body
-				className="antialiased"
-				style={{
-					fontFamily:
-						'-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, "Helvetica Neue", Helvetica, Arial, "Noto Sans Thai", "Sukhumvit Set", "Sarabun", sans-serif',
-				}}>
+		<html lang="en" className="scroll-smooth">
+			<body className={`antialiased ${ibmPlexSansThai.variable}`}>
 				<Navbar />
 				{children}
+				<ToastContainer/>
 			</body>
 		</html>
 	);

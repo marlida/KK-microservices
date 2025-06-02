@@ -1,11 +1,11 @@
-import React from "react";
+import { FC } from "react";
 
 interface NavButtonProps {
   label: string;
   onClick: () => void;
 }
 
-const NavButton: React.FC<NavButtonProps> = ({ label, onClick }) => {
+const NavButton: FC<NavButtonProps> = ({ label, onClick }) => {
   return (
     <button 
       onClick={onClick} 
@@ -15,5 +15,6 @@ const NavButton: React.FC<NavButtonProps> = ({ label, onClick }) => {
     </button>
   );
 };
+
 
 export default NavButton;
