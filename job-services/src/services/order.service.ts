@@ -79,6 +79,19 @@ export class orderService {
                 orderBy: {
                     id: "asc",
                 },
+                include: {
+                    product: {
+                        select: {
+                            name: true,
+                            serial: true
+                        },
+                    },
+                    admin: {
+                        select: {
+                            name: true,
+                        },
+                    }
+                }
             });
             console.log("Order data retrieved from database");
 

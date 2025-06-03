@@ -113,6 +113,7 @@ adminService.updateAdmin = async (id, adminData) => {
             data: adminData,
         });
         await _a.clearAdminCacheById(id);
+        await _a.clearAdminCache();
         return updatedAdmin;
     }
     catch (error) {
