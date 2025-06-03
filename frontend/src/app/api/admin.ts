@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Admin } from "@/types/Admin";
 
-const BASE_URL: string = process.env.NEXT_PUBLIC_BASE_URL || "";
+const BASE_URL: string = "http://localhost:8000/jobs/admin";
 
 export const fetchAdmins = async () => {
 	const res = await axios.get(BASE_URL);

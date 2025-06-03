@@ -1,11 +1,11 @@
 import { ReactNode, FC } from "react";
 
-interface AdminRowProps {
+interface GlobalRowProps {
 	children: ReactNode;
 	isEven: boolean;
 }
 
-const AdminRow: FC<AdminRowProps> = ({ children, isEven }) => {
+const GlobalRow: FC<GlobalRowProps> = ({ children, isEven }) => {
 	return (
 		<tr
 			className={`transition-colors duration-200 hover:bg-gray-50 ${
@@ -16,4 +16,4 @@ const AdminRow: FC<AdminRowProps> = ({ children, isEven }) => {
 	);
 };
 
-export default AdminRow;
+export default GlobalRow;

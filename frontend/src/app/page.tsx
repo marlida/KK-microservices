@@ -3,21 +3,21 @@ import { useEffect } from "react";
 import HeroBanner from "./components/Home/HeroBanner";
 import DataOverview from "./components/Home/DataOverview";
 import useAdminStore from "@/store/adminStore";
-// import useBrandStore from "@/store/brandStore";
+import useBrandStore from "@/store/brandStore";
 // import useCategoryStore from "@/store/categoryStore";
 // import useOrderStore from "@/store/orderStore";
 // import useProductStore from "@/store/productStore";
-// import useUserStore from "@/store/userStore";
+import useUserStore from "@/store/userStore";
 
 export default function Home() {
 	const fetchAllData = async () => {
 		await Promise.all([
 			useAdminStore.getState().fetchAdmins(),
-			// useBrandStore.getState().fetchBrands(),
+			useBrandStore.getState().fetchBrands(),
 			// useCategoryStore.getState().fetchCategories(),
 			// useOrderStore.getState().fetchOrders(),
 			// useProductStore.getState().fetchProducts(),
-			// useUserStore.getState().fetchUsers(),
+			useUserStore.getState().fetchUsers(),
 		]);
 	};
 	useEffect(() => {

@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { Admin } from "@/types";
 import { formatDate } from "@/lib/dateUtils";
-import AdminRow from "./AdminRow";
+import GlobalRow from "../GlobalRow";
 import { PencilIcon, TrashIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAdminStore } from "@/store";
 import { showSuccessToast } from "@/lib/toast";
@@ -45,7 +45,7 @@ const AdminDetail: FC<AdminDetailProps> = ({ admin, index }) => {
 	}, [message]);
 
 	return (
-		<AdminRow isEven={index % 2 === 0}>
+		<GlobalRow isEven={index % 2 === 0}>
 			<td className="px-6 py-2 whitespace-nowrap border-r border-gray-200">
 				<div className="flex items-center justify-center">
 					<span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
@@ -133,7 +133,7 @@ const AdminDetail: FC<AdminDetailProps> = ({ admin, index }) => {
 					)}
 				</div>
 			</td>
-		</AdminRow>
+		</GlobalRow>
 	);
 };
 

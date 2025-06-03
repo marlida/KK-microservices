@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useAdminStore } from "@/store";
 import { Admin } from "@/types";
 import { UserIcon } from "@heroicons/react/24/outline";
-import AdminDetail from "./adminDatail/AdminDetail";
-import AdminTableHeader from "./adminDatail/AdminTableHeader";
+import AdminDetail from "./adminDetail/AdminDetail";
+import AdminTableHeader from "./adminDetail/AdminTableHeader";
 import { showSuccessToast } from "@/lib/toast";
 import RefreshButton from "../../RefreshButton";
-import AdminCreate from "./adminDatail/AdminCreate";
+import AdminCreate from "./adminDetail/AdminCreate";
 
 const AdminTable = () => {
 	const admins = useAdminStore((state) => state.admins);
@@ -34,7 +34,7 @@ const AdminTable = () => {
 				</div>
 			</div>
 			<div className="border-1 border-gray-200">
-				<table className="min-w-full divide-y divide-gray-300 ">
+				<table className="w-full divide-y divide-gray-300 ">
 					<AdminTableHeader />
 					<tbody className="bg-white divide-y divide-gray-100 cursor-pointer">
 						{data.map((admin: Admin, index: number) => (

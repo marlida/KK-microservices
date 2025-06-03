@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import {
 	CheckCircleIcon,
@@ -7,7 +5,6 @@ import {
 	BuildingOfficeIcon,
 	ChartBarIcon,
 } from "@heroicons/react/24/outline";
-import RefreshButton from "./RefreshButton";
 
 const Navbar = () => {
 	return (
@@ -43,7 +40,6 @@ const Navbar = () => {
 								</span>
 							</Link>
 						</li>
-						<RefreshButton onRefresh={() => window.location.reload()} />
 					</ul>
 				</div>
 			</div>
