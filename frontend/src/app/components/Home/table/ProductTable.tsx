@@ -9,6 +9,7 @@ import RefreshButton from "../../RefreshButton";
 import ProductCreate from "./productDetail/ProductCreate";
 import { InputFilter, DropdownFilter } from "../InputFilter";
 import { formatDate } from "@/lib/dateUtils";
+import ProductExport from "./productDetail/ProductExport";
 
 const ProductTable = () => {
 	const [filter, setFilter] = useState("");
@@ -44,6 +45,7 @@ const ProductTable = () => {
 					จัดการสินค้า
 				</h2>
 				<div className="flex items-center gap-4">
+					<ProductExport />
 					<ProductCreate />
 					<RefreshButton onRefresh={fetchProducts} />
 				</div>

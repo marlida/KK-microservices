@@ -33,7 +33,7 @@ const BrandDetail: FC<BrandDetailProps> = ({ brand, index }) => {
 			showSuccessToast(message);
 			setEditState(true);
 		} catch {
-			showErrorToast("Update failed. Please try again.");
+			showErrorToast("การอัปเดตล้มเหลว กรุณาลองใหม่อีกครั้ง");
 		}
 	};
 
@@ -42,7 +42,7 @@ const BrandDetail: FC<BrandDetailProps> = ({ brand, index }) => {
 			await removeBrand(id);
 			showSuccessToast(message);
 		} catch {
-			showErrorToast("Delete failed. Please try again.");
+			showErrorToast("การลบล้มเหลว กรุณาลองใหม่อีกครั้ง");
 		}
 	};
 
@@ -60,7 +60,7 @@ const BrandDetail: FC<BrandDetailProps> = ({ brand, index }) => {
 			{/* Brand Name */}
 			<td className="px-6 py-2 whitespace-nowrap border-r border-gray-200">
 				<div className="flex items-center justify-around">
-					<div className="flex-shrink-0 h-8 w-8">
+					<div className="flex-shrink-0 h-8 w-8 justify-center">
 						<div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
 							<span className="text-sm font-medium text-white">
 								{brand.name ? brand.name.charAt(0).toUpperCase() : "?"}

@@ -82,6 +82,9 @@ categoryService.getCategory = async () => {
         const categories = await db_1.default.category.findMany({
             orderBy: {
                 id: 'asc'
+            },
+            include: {
+                brand: true,
             }
         });
         // Cache the new category data

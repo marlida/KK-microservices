@@ -78,7 +78,7 @@ const ProductTableHeader: FC = () => {
 					className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r border-gray-200">
 					<div className="flex items-center justify-center">
 						<ArrowPathIcon className="w-5 h-5 mr-2 text-orange-500" />
-						Updated At
+						วันที่เพิ่ม
 					</div>
 				</th>
 				<th
@@ -86,7 +86,7 @@ const ProductTableHeader: FC = () => {
 					className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
 					<div className="flex items-center justify-center">
 						<CogIcon className="w-5 h-5 mr-2 text-orange-500" />
-						Management
+						จัดการ
 					</div>
 				</th>
 			</tr>

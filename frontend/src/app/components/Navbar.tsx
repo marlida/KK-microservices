@@ -9,7 +9,7 @@ import {
 const Navbar = () => {
 	return (
 		<nav className="bg-white/80 backdrop-blur-md border-b border-gray-100/50 fixed top-0 left-0 right-0 z-50">
-			<div className="max-w-6xl mx-auto px-6 lg:px-8">
+			<div className="px-20 mx-auto lg:px-8">
 				<div className="flex justify-between items-center h-14">
 					<div className="flex items-center space-x-2">
 						<CheckCircleIcon className="w-5 h-5 text-blue-500" />

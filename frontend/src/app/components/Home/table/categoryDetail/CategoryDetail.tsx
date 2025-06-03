@@ -55,15 +55,14 @@ const CategoryDetail: FC<CategoryDetailProps> = ({ category, index }) => {
 
 			{/* Category Name */}
 			<td className="px-6 py-2 whitespace-nowrap border-r border-gray-200">
-				<div className="flex items-center justify-around">
-					<div className="flex-shrink-0 h-8 w-8">
-						<div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
-							<span className="text-sm font-medium text-white">
-								{category.name ? category.name.charAt(0).toUpperCase() : "?"}
-							</span>
-						</div>
+				<div className="flex items-center justify-around gap-5">
+					<div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
+						<span className="text-sm font-medium text-white">
+							{category.name ? category.name.charAt(0).toUpperCase() : "?"}
+						</span>
 					</div>
-					<div className="ml-3">
+
+					<div className="ml-3 flex w-1/2 text-center">
 						{editState ? (
 							<p className="text-sm text-gray-800">{category.name || "-"}</p>
 						) : (

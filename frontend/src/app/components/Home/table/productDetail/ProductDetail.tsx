@@ -50,7 +50,7 @@ const ProductDetail: FC<ProductDetailProps> = ({ product, index }) => {
 				<div className="flex items-center justify-center">
 					<input
 						type="text"
-						className={`text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
+						className={`w-full text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
 							!editState
 								? "bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
 								: "border-gray-100/0"
@@ -65,7 +65,7 @@ const ProductDetail: FC<ProductDetailProps> = ({ product, index }) => {
 				<div className="flex items-center justify-center">
 					<input
 						type="number"
-						className={`text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
+						className={`w-full text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
 							!editState
 								? "bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
 								: "border-gray-100/0"
@@ -80,7 +80,7 @@ const ProductDetail: FC<ProductDetailProps> = ({ product, index }) => {
 				<div className="flex items-center justify-center">
 					<input
 						type="text"
-						className={`text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
+						className={`w-full text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
 							!editState
 								? "bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
 								: "border-gray-100/0"
@@ -95,7 +95,7 @@ const ProductDetail: FC<ProductDetailProps> = ({ product, index }) => {
 				<div className="flex items-center justify-center">
 					<input
 						type="text"
-						className={`text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
+						className={`w-full text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
 							!editState
 								? "bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
 								: "border-gray-100/0"
@@ -110,7 +110,7 @@ const ProductDetail: FC<ProductDetailProps> = ({ product, index }) => {
 				<div className="flex items-center justify-center">
 					<input
 						type="number"
-						className={`text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
+						className={`w-full text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
 							!editState
 								? "bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
 								: "border-gray-100/0"
@@ -125,7 +125,7 @@ const ProductDetail: FC<ProductDetailProps> = ({ product, index }) => {
 				<div className="flex items-center justify-center">
 					<input
 						type="number"
-						className={`text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
+						className={`w-full text-sm font-medium border text-gray-700 rounded px-4 py-1 text-center ${
 							!editState
 								? "bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
 								: "border-gray-100/0"
@@ -139,7 +139,7 @@ const ProductDetail: FC<ProductDetailProps> = ({ product, index }) => {
 			<td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
 				<div className="flex items-center justify-center">
 					<div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
-					{formatDate(product.updatedAt)}
+					{formatDate(product.createdAt)}
 				</div>
 			</td>
 			<td className="px-6 py-2 whitespace-nowrap text-sm font-medium">

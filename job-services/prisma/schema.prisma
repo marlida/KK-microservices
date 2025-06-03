@@ -13,6 +13,7 @@ model User {
   tel       String?  @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  orders    Order[]
 }
 
 model Admin {
@@ -48,9 +49,9 @@ model Product {
   name        String?
   price       Float?
   serial      String?   @unique
-  description String?
-  quantity    Int?
-  sold        Int?
+  description String?   @default("")
+  quantity    Int?      @default(0)
+  sold        Int?      @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   brandId     Int?
@@ -63,6 +64,8 @@ model Product {
 model Order {
   id               Int      @id @default(autoincrement())
   name             String?
+  userId           Int?
+  user             User?    @relation(fields: [userId], references: [id])
   adminId          Int?
   admin            Admin?   @relation(fields: [adminId], references: [id])
   productId        Int?
