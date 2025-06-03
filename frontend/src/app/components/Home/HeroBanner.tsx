@@ -3,7 +3,7 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 const HeroBanner = () => {
 	return (
-		<div className="bg-white text-gray-800 p-16 pt-32 text-center shadow-lg min-h-screen flex flex-col items-center justify-center">
+		<div className="bg-white text-gray-800 p-16 pt-32 text-center min-h-screen flex flex-col items-center justify-center">
 			<h1 className="text-5xl font-extrabold">Welcome to KK Service</h1>
 			<p className="text-xl mt-4">Your trusted partner for all services</p>
 			<button

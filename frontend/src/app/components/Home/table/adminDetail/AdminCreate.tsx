@@ -15,17 +15,17 @@ const AdminCreate: FC = () => {
 		e.preventDefault();
 
 		if (!formData.name) {
-			setMessage("Please enter admin name.");
+			setMessage("กรุณากรอกชื่อผู้ดูแลระบบ");
 			return;
 		}
 
 		if (!formData.tel) {
-			setMessage("Please enter telephone number.");
+			setMessage("กรุณากรอกเบอร์โทรศัพท์");
 			return;
 		}
 
 		if (!/^\d{10}$/.test(formData.tel)) {
-			setMessage("Please enter a valid phone number 10.");
+			setMessage("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง 10 หลัก");
 			return;
 		}
 
@@ -40,11 +40,11 @@ const AdminCreate: FC = () => {
 				onClick={() => setIsOpen(true)}
 				className="flex items-center gap-2 px-4 py-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium border border-blue-200 hover:border-blue-300 cursor-pointer">
 				<PlusIcon className="w-4 h-4" />
-				Create Admin
+				สร้างผู้ดูแลระบบ
 			</button>
 
 			<div
-				className={`fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center ${
+				className={`fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center z-10 ${
 					isOpen ? "visible" : "invisible"
 				} transition-all duration-300`}>
 				<div
@@ -52,11 +52,11 @@ const AdminCreate: FC = () => {
 						isOpen ? "scale-100" : "scale-95"
 					}`}>
 					<div className="space-y-6">
-						<h2 className="text-2xl font-semibold text-gray-900">Create Admin</h2>
+						<h2 className="text-2xl font-semibold text-gray-900">สร้างผู้ดูแลระบบ</h2>
 
 						<form onSubmit={handleSubmit} className="space-y-5">
 							<div className="space-y-2">
-								<label className="text-sm font-medium text-gray-700">Name</label>
+								<label className="text-sm font-medium text-gray-700">ชื่อ</label>
 								<input
 									type="text"
 									value={formData.name}
@@ -64,13 +64,13 @@ const AdminCreate: FC = () => {
 										setFormData({ ...formData, name: e.target.value })
 									}
 									className="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-									placeholder="Enter admin name"
+									placeholder="กรอกชื่อผู้ดูแลระบบ"
 								/>
 							</div>
 
 							<div className="space-y-2">
 								<label className="text-sm font-medium text-gray-700">
-									Telephone
+									เบอร์โทรศัพท์
 								</label>
 								<input
 									type="text"
@@ -79,7 +79,7 @@ const AdminCreate: FC = () => {
 										setFormData({ ...formData, tel: e.target.value })
 									}
 									className="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-									placeholder="Enter phone number"
+									placeholder="กรอกเบอร์โทรศัพท์"
 								/>
 							</div>
 
@@ -90,13 +90,12 @@ const AdminCreate: FC = () => {
 									type="button"
 									onClick={() => setIsOpen(false)}
 									className="flex-1 px-4 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors font-medium cursor-pointer">
-									Cancel
+									ยกเลิก
 								</button>
 								<button
 									type="submit"
 									className="flex-1 px-4 py-2.5 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors font-medium cursor-pointer">
-									{" "}
-									Create
+									สร้าง
 								</button>
 							</div>
 						</form>

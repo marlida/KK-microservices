@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Admin } from "@/types";
 import { formatDate } from "@/lib/dateUtils";
 import GlobalRow from "../GlobalRow";
@@ -14,35 +14,39 @@ interface AdminDetailProps {
 const AdminDetail: FC<AdminDetailProps> = ({ admin, index }) => {
 	const [editState, setEditState] = useState(true);
 	const [editData, setEditData] = useState<Admin | null>(null);
+	const message = useAdminStore((state) => state.admins.message);
 	const updateAdmin = useAdminStore((state) => state.updateAdmin);
 	const removeAdmin = useAdminStore((state) => state.removeAdmin);
-	const message = useAdminStore((state) => state.admins.message);
+
+	const handleChangeField = (key: keyof Admin, value: string | number) => {
+		if (!editData) return;
+		setEditData({ ...editData, [key]: value });
+	};
 
 	const handleConfirm = async () => {
 		if (editData) {
-			const response = await updateAdmin(admin.id, editData);
-			console.log("Update response:", response);
-			setEditState(true);
+			try {
+				await updateAdmin(admin.id, editData);
+				showSuccessToast(message);
+			} catch {
+				showSuccessToast(message);
+			}
 		}
-	};
-
-	const handleCancel = () => {
-		setEditData(null);
 		setEditState(true);
+		setEditData(null);
 	};
 
 	const handleDelete = async (id: number) => {
-		if (id) {
-			await removeAdmin(id);
-			console.log("Delete response:", message);
-		}
+		await removeAdmin(id);
+		showSuccessToast(message);
 	};
 
-	useEffect(() => {
-		if (message) {
-			showSuccessToast(message);
-		}
-	}, [message]);
+	const handleCancel = () => {
+		setEditState(true);
+		setEditData(null);
+	};
+
+	const currentData = editData ?? admin;
 
 	return (
 		<GlobalRow isEven={index % 2 === 0}>
@@ -53,62 +57,77 @@ const AdminDetail: FC<AdminDetailProps> = ({ admin, index }) => {
 					</span>
 				</div>
 			</td>
-			<td className="px-6 py-2 hitespace-nowrap border-r border-gray-200">
-				<div className="flex items-center justify-center">
+
+			{/* ชื่อแอดมิน */}
+			<td className="px-6 py-2 whitespace-nowrap border-r border-gray-200">
+				<div className="flex items-center justify-around">
 					<div className="flex-shrink-0 h-8 w-8">
 						<div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
 							<span className="text-sm font-medium text-white">
-								{admin.name ? admin.name.charAt(3).toUpperCase() : "?"}
+								{currentData.name?.charAt(0).toUpperCase() || "?"}
 							</span>
 						</div>
 					</div>
 					<div className="ml-3">
 						<input
 							type="text"
-							className={`text-sm font-normal border border-gray-50/0 text-gray-700 rounded px-4 py-1 ${
-								!editState &&
-								"bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className={`text-sm font-normal text-gray-700 rounded px-4 py-1 ${
+								!editState
+									? "bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+									: "border border-gray-50/0"
 							}`}
-							defaultValue={admin.name || "-"}
-							onChange={(e) => setEditData({ ...admin, name: e.target.value })}
+							value={currentData.name ?? ""}
+							onChange={(e) => handleChangeField("name", e.target.value)}
 							disabled={editState}
 						/>
 					</div>
 				</div>
 			</td>
+
+			{/* เบอร์โทร */}
 			<td className="px-6 py-2 whitespace-nowrap border-r border-gray-200">
 				<div className="flex items-center justify-center">
 					<input
 						type="text"
-						className={`text-sm font-medium border border-gray-100/0 text-gray-700 rounded px-4 py-1 text-center ${
-							!editState &&
-							"bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className={`text-sm font-medium text-gray-700 rounded px-4 py-1 text-center ${
+							!editState
+								? "bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+								: "border border-gray-100/0"
 						}`}
-						defaultValue={admin.tel || "No phone"}
-						onChange={(e) => setEditData({ ...admin, tel: e.target.value })}
+						value={currentData.tel ?? ""}
+						onChange={(e) => handleChangeField("tel", e.target.value)}
 						disabled={editState}
 					/>
 				</div>
 			</td>
+
+			{/* วันที่สร้าง */}
 			<td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
 				<div className="flex items-center justify-center">
 					<div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
 					{formatDate(admin.createdAt)}
 				</div>
 			</td>
+
+			{/* วันที่แก้ไขล่าสุด */}
 			<td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
 				<div className="flex items-center justify-center">
 					<div className="w-2 h-2 bg-orange-400 rounded-full mr-2"></div>
 					{formatDate(admin.updatedAt)}
 				</div>
 			</td>
+
+			{/* ปุ่ม Action */}
 			<td className="px-6 py-2 whitespace-nowrap text-sm font-medium">
 				<div className="flex items-center justify-center gap-8">
 					{editState ? (
 						<>
 							<button
 								className="text-blue-600 hover:text-blue-800 transition-colors duration-200 cursor-pointer"
-								onClick={() => setEditState(false)}>
+								onClick={() => {
+									setEditData(admin);
+									setEditState(false);
+								}}>
 								<PencilIcon className="w-5 h-5 stroke-2" />
 							</button>
 							<button

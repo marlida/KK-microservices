@@ -9,7 +9,7 @@ import {
 
 const CategoryTableHeader: FC = () => {
     return (
-        <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
+        <thead>
             <tr>
                 <th
                     scope="col"
@@ -18,7 +18,7 @@ const CategoryTableHeader: FC = () => {
                         <span className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-2 text-blue-600 text-xs font-bold">
                             #
                         </span>
-                        ID
+                        รหัส
                     </div>
                 </th>
                 <th
@@ -26,7 +26,7 @@ const CategoryTableHeader: FC = () => {
                     className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r border-gray-200">
                     <div className="flex items-center justify-center">
                         <TagIcon className="w-5 h-5 mr-2 text-blue-500" />
-                        Name
+                        ชื่อหมวดหมู่
                     </div>
                 </th>
                 <th
@@ -34,7 +34,7 @@ const CategoryTableHeader: FC = () => {
                     className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r border-gray-200">
                     <div className="flex items-center justify-center">
                         <BuildingStorefrontIcon className="w-5 h-5 mr-2 text-green-500" />
-                        Brand
+                        แบรนด์
                     </div>
                 </th>
                 <th
@@ -42,7 +42,7 @@ const CategoryTableHeader: FC = () => {
                     className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r border-gray-200">
                     <div className="flex items-center justify-center">
                         <ClockIcon className="w-5 h-5 mr-2 text-purple-500" />
-                        Created At
+                        วันที่สร้าง
                     </div>
                 </th>
                 <th
@@ -50,7 +50,7 @@ const CategoryTableHeader: FC = () => {
                     className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r border-gray-200">
                     <div className="flex items-center justify-center">
                         <ArrowPathIcon className="w-5 h-5 mr-2 text-orange-500" />
-                        Updated At
+                        วันที่อัปเดต
                     </div>
                 </th>
                 <th
@@ -58,7 +58,7 @@ const CategoryTableHeader: FC = () => {
                     className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     <div className="flex items-center justify-center">
                         <CogIcon className="w-5 h-5 mr-2 text-orange-500" />
-                        Management
+                        จัดการ
                     </div>
                 </th>
             </tr>

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Category } from "../types/Category";
+import { Category, CategoryCreatePayload } from "../types/Category";
 import * as categoryAPI from "@/app/api/category";
 
 interface CategoryState {
@@ -10,7 +10,7 @@ interface CategoryState {
 	removeCategory: (id: number) => Promise<void>;
 	fetchCategories: () => Promise<void>;
 	updateCategory: (id: number, updatedCategory: Category) => Promise<void>;
-	createCategory: (categoryData: Category) => Promise<void>;
+	createCategory: (categoryData: CategoryCreatePayload) => Promise<Category>;
 }
 
 const useCategoryStore = create<CategoryState>((set) => ({
@@ -42,9 +42,9 @@ const useCategoryStore = create<CategoryState>((set) => ({
 		}
 	},
 
-	createCategory: async (categoryData) => {
+	createCategory: async (newCategory: CategoryCreatePayload) => {
 		try {
-			const { data, message } = await categoryAPI.createCategory(categoryData);
+			const { data, message } = await categoryAPI.createCategory(newCategory);
 			set((state) => ({
 				categories: {
 					...state.categories,
@@ -52,25 +52,29 @@ const useCategoryStore = create<CategoryState>((set) => ({
 					message,
 				},
 			}));
+			return data;
 		} catch (error) {
 			console.error("❌ Failed to create category:", error);
+			throw error;
 		}
 	},
 
 	updateCategory: async (id, updatedCategory) => {
 		try {
-			const { message } = await categoryAPI.updateCategory(id, updatedCategory);
+			const { data, message } = await categoryAPI.updateCategory(id, updatedCategory);
 			set((state) => ({
 				categories: {
 					...state.categories,
 					data: state.categories.data.map((category) =>
-						category.id === id ? { ...category, ...updatedCategory } : category,
+						category.id === id ? { ...category, ...data } : category,
 					),
 					message,
 				},
 			}));
+			return data;
 		} catch (error) {
 			console.error("❌ Failed to update category:", error);
+			throw error;
 		}
 	},
 }));

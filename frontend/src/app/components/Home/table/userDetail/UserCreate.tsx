@@ -2,37 +2,42 @@ import { useState, FC, FormEvent } from "react";
 import { useUserStore } from "@/store";
 import { User } from "@/types";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 
 type UserCreateData = Pick<User, "name" | "tel">;
 
 const UserCreate: FC = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [formData, setFormData] = useState<UserCreateData>({ name: "", tel: "" });
-    const [message, setMessage] = useState<string>("");
-    const createUser = useUserStore((state) => state.createUser);
+	const [isOpen, setIsOpen] = useState(false);
+	const [formData, setFormData] = useState<UserCreateData>({ name: "", tel: "" });
+	const [message, setMessage] = useState<string>("");
+	const createUser = useUserStore((state) => state.createUser);
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
+	const handleSubmit = async (e: FormEvent) => {
+		e.preventDefault();
 
-        if (!formData.name) {
-            setMessage("Please enter user name.");
-            return;
-        }
+		if (!formData.name) {
+			setMessage("กรุณากรอกชื่อผู้ใช้");
+			return;
+		}
 
-        if (!formData.tel) {
-            setMessage("Please enter telephone number.");
-            return;
-        }
+		if (!formData.tel) {
+			setMessage("กรุณากรอกหมายเลขโทรศัพท์");
+			return;
+		}
 
-        if (!/^\d{10}$/.test(formData.tel)) {
-            setMessage("Please enter a valid phone number 10.");
-            return;
-        }
-
-        await createUser(formData as User);
-        setIsOpen(false);
-        setFormData({ name: "", tel: "" });
-    };
+		if (!/^\d{10}$/.test(formData.tel)) {
+			setMessage("กรุณากรอกหมายเลขโทรศัพท์ที่ถูกต้อง 10 หลัก");
+			return;
+		}
+		try {
+			await createUser(formData as User);
+			showSuccessToast("สร้างผู้ใช้สำเร็จ");
+			setIsOpen(false);
+			setFormData({ name: "", tel: "" });
+		} catch {
+			showErrorToast("ไม่สามารถสร้างผู้ใช้ได้");
+		}
+	};
 
     return (
         <>
@@ -40,11 +45,11 @@ const UserCreate: FC = () => {
                 onClick={() => setIsOpen(true)}
                 className="flex items-center gap-2 px-4 py-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium border border-blue-200 hover:border-blue-300 cursor-pointer">
                 <PlusIcon className="w-4 h-4" />
-                Create User
+                สร้างผู้ใช้
             </button>
 
             <div
-                className={`fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center ${
+                className={`fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center z-10 ${
                     isOpen ? "visible" : "invisible"
                 } transition-all duration-300`}>
                 <div
@@ -52,11 +57,11 @@ const UserCreate: FC = () => {
                         isOpen ? "scale-100" : "scale-95"
                     }`}>
                     <div className="space-y-6">
-                        <h2 className="text-2xl font-semibold text-gray-900">Create User</h2>
+                        <h2 className="text-2xl font-semibold text-gray-900">สร้างผู้ใช้</h2>
 
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-700">Name</label>
+                                <label className="text-sm font-medium text-gray-700">ชื่อ</label>
                                 <input
                                     type="text"
                                     value={formData.name}
@@ -64,13 +69,13 @@ const UserCreate: FC = () => {
                                         setFormData({ ...formData, name: e.target.value })
                                     }
                                     className="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                    placeholder="Enter user name"
+                                    placeholder="กรอกชื่อผู้ใช้"
                                 />
                             </div>
 
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-700">
-                                    Telephone
+                                    หมายเลขโทรศัพท์
                                 </label>
                                 <input
                                     type="text"
@@ -79,7 +84,7 @@ const UserCreate: FC = () => {
                                         setFormData({ ...formData, tel: e.target.value })
                                     }
                                     className="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                    placeholder="Enter phone number"
+                                    placeholder="กรอกหมายเลขโทรศัพท์"
                                 />
                             </div>
 
@@ -90,13 +95,12 @@ const UserCreate: FC = () => {
                                     type="button"
                                     onClick={() => setIsOpen(false)}
                                     className="flex-1 px-4 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors font-medium cursor-pointer">
-                                    Cancel
+                                    ยกเลิก
                                 </button>
                                 <button
                                     type="submit"
                                     className="flex-1 px-4 py-2.5 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors font-medium cursor-pointer">
-                                    {" "}
-                                    Create
+                                    สร้าง
                                 </button>
                             </div>
                         </form>
