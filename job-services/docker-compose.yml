@@ -16,8 +16,6 @@ services:
       - DATABASE_URL=postgresql://admin:postgres@postgres:5432/mydb?schema=public
       - REDIS_URL=redis://redis:6379/0
       - PORT=8000
-    depends_on:
-      - redis
     networks:
       - kk-network
 

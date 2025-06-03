@@ -45,6 +45,9 @@ export class categoryService {
             const categories = await prisma.category.findMany({
                 orderBy: {
                     id: 'asc'
+                },
+                include: {
+                    brand: true,
                 }
             });
             // Cache the new category data

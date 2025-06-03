@@ -108,6 +108,7 @@ export class adminService {
                 data: adminData,
             });
             await this.clearAdminCacheById(id);
+            await this.clearAdminCache();
             return updatedAdmin;
         } catch (error) {
             if (error instanceof Error) {
