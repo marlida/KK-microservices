@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans_Thai_Looped } from "next/font/google";
+import { Noto_Sans_Thai } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
 import { ToastContainer } from 'react-toastify';
 
-const ibmPlexSansThai = IBM_Plex_Sans_Thai_Looped({
+const notoSansThai = Noto_Sans_Thai({
 	subsets: ["latin", "thai"],
 	weight: ["100", "200", "300", "400", "500", "600", "700"],
-	variable: "--font-ibm-plex-sans-thai",
+	variable: "--font-noto-sans-thai",
 });
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className="scroll-smooth">
-			<body className={`antialiased ${ibmPlexSansThai.variable}`}>
+			<body className={`antialiased ${notoSansThai.variable}`}>
 				<Navbar />
 				{children}
 				<ToastContainer/>

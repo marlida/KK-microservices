@@ -6,63 +6,50 @@ import {
     ArrowPathIcon,
     CogIcon,
 } from "@heroicons/react/24/outline";
+import { TableHead, TableRow } from "@/components/ui/table";
 
 const CategoryTableHeader: FC = () => {
     return (
-        <thead>
-            <tr>
-                <th
-                    scope="col"
-                    className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r border-gray-200">
-                    <div className="flex items-center justify-center">
-                        <span className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-2 text-blue-600 text-xs font-bold">
-                            #
-                        </span>
-                        รหัส
-                    </div>
-                </th>
-                <th
-                    scope="col"
-                    className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r border-gray-200">
-                    <div className="flex items-center justify-center">
-                        <TagIcon className="w-5 h-5 mr-2 text-blue-500" />
-                        ชื่อหมวดหมู่
-                    </div>
-                </th>
-                <th
-                    scope="col"
-                    className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r border-gray-200">
-                    <div className="flex items-center justify-center">
-                        <BuildingStorefrontIcon className="w-5 h-5 mr-2 text-green-500" />
-                        แบรนด์
-                    </div>
-                </th>
-                <th
-                    scope="col"
-                    className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r border-gray-200">
-                    <div className="flex items-center justify-center">
-                        <ClockIcon className="w-5 h-5 mr-2 text-purple-500" />
-                        วันที่สร้าง
-                    </div>
-                </th>
-                <th
-                    scope="col"
-                    className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-r border-gray-200">
-                    <div className="flex items-center justify-center">
-                        <ArrowPathIcon className="w-5 h-5 mr-2 text-orange-500" />
-                        วันที่อัปเดต
-                    </div>
-                </th>
-                <th
-                    scope="col"
-                    className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    <div className="flex items-center justify-center">
-                        <CogIcon className="w-5 h-5 mr-2 text-orange-500" />
-                        จัดการ
-                    </div>
-                </th>
-            </tr>
-        </thead>
+        <TableRow>
+            <TableHead className="text-center w-[100px] border-r">
+                <div className="flex items-center justify-center">
+                    <span className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-2 text-blue-600 text-xs font-bold">
+                        #
+                    </span>
+                    รหัส
+                </div>
+            </TableHead>
+            <TableHead className="text-center border-r">
+                <div className="flex items-center justify-center">
+                    <TagIcon className="w-5 h-5 mr-2 text-blue-500" />
+                    ชื่อหมวดหมู่
+                </div>
+            </TableHead>
+            <TableHead className="text-center border-r">
+                <div className="flex items-center justify-center">
+                    <BuildingStorefrontIcon className="w-5 h-5 mr-2 text-green-500" />
+                    แบรนด์
+                </div>
+            </TableHead>
+            <TableHead className="text-center border-r">
+                <div className="flex items-center justify-center">
+                    <ClockIcon className="w-5 h-5 mr-2 text-purple-500" />
+                    วันที่สร้าง
+                </div>
+            </TableHead>
+            <TableHead className="text-center border-r">
+                <div className="flex items-center justify-center">
+                    <ArrowPathIcon className="w-5 h-5 mr-2 text-orange-500" />
+                    วันที่อัปเดต
+                </div>
+            </TableHead>
+            <TableHead className="text-center w-[120px]">
+                <div className="flex items-center justify-center">
+                    <CogIcon className="w-5 h-5 mr-2 text-orange-500" />
+                    จัดการ
+                </div>
+            </TableHead>
+        </TableRow>
     );
 };
 

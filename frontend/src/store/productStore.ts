@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Product } from "../types/Product";
 import * as productAPI from "@/app/api/product";
+import { ProductCreationPayload } from "@/lib/productUtils"; // Import ProductCreationPayload
 
 interface ProductState {
 	products: {
@@ -9,8 +10,8 @@ interface ProductState {
 	};
 	removeProduct: (id: number) => Promise<void>;
 	fetchProducts: () => Promise<void>;
-	updateProduct: (id: number, updatedProduct: Product) => Promise<void>;
-	createProduct: (productData: Product) => Promise<Product>;
+	updateProduct: (id: number, updatedProduct: Product) => Promise<void>; // Consider if this also needs ProductCreationPayload or a similar partial type
+	createProduct: (productData: ProductCreationPayload) => Promise<Product>; // Changed to ProductCreationPayload
 }
 
 const useProductStore = create<ProductState>((set) => ({
@@ -42,7 +43,7 @@ const useProductStore = create<ProductState>((set) => ({
 		}
 	},
 
-	createProduct: async (newProduct: Product) => {
+	createProduct: async (newProduct: ProductCreationPayload) => { 
 		try {
 			const { data, message } = await productAPI.createProduct(newProduct);
 			console.log(data)

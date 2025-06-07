@@ -9,6 +9,8 @@ import RefreshButton from "../../RefreshButton";
 import UserCreate from "./userDetail/UserCreate";
 import { InputFilter, DropdownFilter } from "../InputFilter";
 import { formatDate } from "@/lib/dateUtils";
+import { Table, TableBody, TableCaption, TableHeader } from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const UserTable = () => {
 	const [filter, setFilter] = useState("");
@@ -35,32 +37,46 @@ const UserTable = () => {
 	}, [message]);
 
 	return (
-		<div className="p-4 bg-white shadow">
-			<div className="mb-6 flex justify-between items-center">
-				<h2 className="text-2xl font-bold text-gray-700 mb-3 flex items-center">
-					<UserIcon className="w-6 h-6 mr-3 text-blue-600" />
-					จัดการผู้ใช้
-				</h2>
-				<div className="flex items-center gap-4">
-					<UserCreate />
-					<RefreshButton onRefresh={fetchUsers} />
+		<Card>
+			<CardHeader>
+				<div className="flex justify-between items-center">
+					<CardTitle className="flex items-center">
+						<UserIcon className="w-6 h-6 mr-3 text-blue-600" />
+						จัดการผู้ใช้
+					</CardTitle>
+					<div className="flex items-center gap-4">
+						<UserCreate />
+						<RefreshButton onRefresh={fetchUsers} />
+					</div>
 				</div>
-			</div>
-			<div className="flex justify-between">
-				<InputFilter value={filter} onChange={setFilter} placeholder="Filter by name" />
-				<DropdownFilter options={uniqueDates} value={dateFilter} onChange={setDateFilter} />
-			</div>
-			<div className="border-1 border-gray-200">
-				<table className="w-full divide-y divide-gray-300 ">
-					<UserTableHeader />
-					<tbody className="bg-white divide-y divide-gray-100 cursor-pointer">
-						{data.map((user: User, index: number) => (
-							<UserDetail key={user.id} user={user} index={index} />
-						))}
-					</tbody>
-				</table>
-			</div>
-		</div>
+			</CardHeader>
+			<CardContent>
+				<div className="flex justify-between mb-4">
+					<InputFilter value={filter} onChange={setFilter} placeholder="Filter by name" />
+					<DropdownFilter
+						options={uniqueDates}
+						value={dateFilter}
+						onChange={setDateFilter}
+					/>
+				</div>
+				<div className="border rounded-md">
+					<Table>
+						<TableHeader>
+							<UserTableHeader />
+						</TableHeader>
+						<TableBody>
+							{data.length > 0 &&
+								data.map((user: User, index: number) => (
+									<UserDetail key={user.id} user={user} index={index} />
+								))}
+						</TableBody>
+						{data.length === 0 && (
+							<TableCaption className="my-5">ไม่พบผู้ใช้</TableCaption>
+						)}
+					</Table>
+				</div>
+			</CardContent>
+		</Card>
 	);
 };
 

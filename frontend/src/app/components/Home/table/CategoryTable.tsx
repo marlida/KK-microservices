@@ -9,6 +9,7 @@ import RefreshButton from "../../RefreshButton";
 import CategoryCreate from "./categoryDetail/CategoryCreate";
 import { InputFilter, DropdownFilter } from "../InputFilter";
 import { formatDate } from "@/lib/dateUtils";
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 
 const CategoryTable = () => {
 	const [filter, setFilter] = useState("");
@@ -37,9 +38,9 @@ const CategoryTable = () => {
 	}, [message]);
 
 	return (
-		<div className="p-4 bg-white shadow">
+		<div className="p-4 bg-white shadow rounded-lg">
 			<div className="mb-6 flex justify-between items-center">
-				<h2 className="text-2xl font-bold text-gray-700 mb-3 flex items-center">
+				<h2 className="text-2xl font-bold text-gray-700 flex items-center">
 					<TagIcon className="w-6 h-6 mr-3 text-blue-600" />
 					จัดการหมวดหมู่
 				</h2>
@@ -48,19 +49,33 @@ const CategoryTable = () => {
 					<RefreshButton onRefresh={fetchCategories} />
 				</div>
 			</div>
-			<div className="flex justify-between">
+			<div className="flex justify-between mb-4">
 				<InputFilter value={filter} onChange={setFilter} placeholder="Filter by name" />
 				<DropdownFilter options={uniqueDates} value={dateFilter} onChange={setDateFilter} />
 			</div>
-			<div className="border-1 border-gray-200">
-				<table className="w-full divide-y divide-gray-300 ">
-					<CategoryTableHeader />
-					<tbody className="bg-white divide-y divide-gray-100 cursor-pointer">
-						{data.map((category: Category, index: number) => (
-							<CategoryDetail key={category.id} category={category} index={index} />
-						))}
-					</tbody>
-				</table>
+			<div className="border rounded-md">
+				<Table>
+					<TableHeader>
+						<CategoryTableHeader />
+					</TableHeader>
+					<TableBody>
+						{data.length > 0 ? (
+							data.map((category: Category, index: number) => (
+								<CategoryDetail
+									key={category.id}
+									category={category}
+									index={index}
+								/>
+							))
+						) : (
+							<TableRow>
+								<TableCell colSpan={6} className="text-center text-gray-500 py-4">
+									No categories found.
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+				</Table>
 			</div>
 		</div>
 	);

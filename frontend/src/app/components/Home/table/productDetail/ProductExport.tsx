@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { Button } from "@/components/ui/button";
 
 export default function ProductExport() {
   const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:8000/';
@@ -31,18 +32,15 @@ export default function ProductExport() {
 
   return (
     <div className="flex items-center">
-        <button
+        <Button
             onClick={downloadExcel}
             disabled={loading}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 font-medium border cursor-pointer ${
-				loading
-					? "text-gray-400 bg-blue-500 border-gray-200 cursor-not-allowed"
-					: "text-blue-600 hover:text-blue-800 hover:bg-blue-50 border-blue-200 hover:border-blue-300"
-			}`}
+            variant="outline" // Example variant, adjust as needed
+            size="default" // Example size, adjust as needed
         >
             <ArrowDownTrayIcon className="w-5 h-5" />
             <span>{loading ? 'กำลังดาวน์โหลด...' : 'ดาวน์โหลด Excel สินค้า'}</span>
-        </button>
+        </Button>
     </div>
   );
 }

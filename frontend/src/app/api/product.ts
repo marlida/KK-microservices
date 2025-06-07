@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Product } from "@/types/Product";
+import { ProductCreationPayload } from "@/lib/productUtils"; // Import ProductCreationPayload
 
 const BASE_URL: string = "http://localhost:8000/jobs/product";
 
@@ -8,7 +9,7 @@ export const fetchProducts = async () => {
     return res.data;
 };
 
-export const createProduct = async (product: Product) => {
+export const createProduct = async (product: ProductCreationPayload) => { // Changed to ProductCreationPayload
     const res = await axios.post(BASE_URL, product);
     return res.data;
 };

@@ -1,10 +1,19 @@
 import { FC, useState } from "react";
 import { Brand, Category } from "@/types";
 import { formatDate } from "@/lib/dateUtils";
-import GlobalRow from "../GlobalRow";
 import { PencilIcon, TrashIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useBrandStore, useCategoryStore } from "@/store";
 import { showSuccessToast, showErrorToast } from "@/lib/toast";
+import { TableCell, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 
 interface CategoryDetailProps {
 	category: Category;
@@ -43,117 +52,111 @@ const CategoryDetail: FC<CategoryDetailProps> = ({ category, index }) => {
 	};
 
 	return (
-		<GlobalRow isEven={index % 2 === 0}>
+		<TableRow className={index % 2 === 1 ? "bg-accent" : ""}>
 			{/* Index */}
-			<td className="px-6 py-2 whitespace-nowrap border-r border-gray-200">
-				<div className="flex items-center justify-center">
-					<span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
-						{index + 1}
-					</span>
-				</div>
-			</td>
+			<TableCell className="font-medium text-center border-r">
+				<span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
+					{index + 1}
+				</span>
+			</TableCell>
 
 			{/* Category Name */}
-			<td className="px-6 py-2 whitespace-nowrap border-r border-gray-200">
-				<div className="flex items-center justify-around gap-5">
-					<div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center">
+			<TableCell className="border-r">
+				<div className="flex items-center gap-3">
+					<div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center shrink-0">
 						<span className="text-sm font-medium text-white">
 							{category.name ? category.name.charAt(0).toUpperCase() : "?"}
 						</span>
 					</div>
-
-					<div className="ml-3 flex w-1/2 text-center">
-						{editState ? (
-							<p className="text-sm text-gray-800">{category.name || "-"}</p>
-						) : (
-							<input
-								type="text"
-								className="text-sm font-normal border border-gray-300 text-gray-700 rounded px-4 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-								value={editData.name || ""}
-								onChange={(e) => handleChangeField("name", e.target.value)}
-							/>
-						)}
-					</div>
+					{editState ? (
+						<p className="text-sm text-gray-800 truncate" title={category.name}>
+							{category.name || "-"}
+						</p>
+					) : (
+						<Input
+							type="text"
+							className="h-8"
+							value={editData.name || ""}
+							onChange={(e) => handleChangeField("name", e.target.value)}
+						/>
+					)}
 				</div>
-			</td>
+			</TableCell>
 
 			{/* Brand */}
-			<td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
-				<div className="flex items-center justify-center">
-					<div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
-					{editState ? (
-						<p>{category.brand?.name ?? "-"}</p>
-					) : (
-						<select
-							className="text-sm font-normal border border-gray-300 text-gray-700 rounded px-4 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-							value={editData.brandId || ""}
-							onChange={(e) => handleChangeField("brandId", Number(e.target.value))}>
-							<option value="">Select a brand</option>
+			<TableCell className="text-center border-r">
+				{editState ? (
+					<p className="text-sm">{category.brand?.name ?? "-"}</p>
+				) : (
+					<Select
+						value={editData.brandId?.toString() || ""}
+						onValueChange={(value) => handleChangeField("brandId", Number(value))}>
+						<SelectTrigger className="h-8 text-xs w-full">
+							<SelectValue placeholder="Select a brand" />
+						</SelectTrigger>
+						<SelectContent>
 							{brands.map((brand) => (
-								<option key={brand.id} value={brand.id}>
+								<SelectItem key={brand.id} value={brand.id.toString()}>
 									{brand.name}
-								</option>
+								</SelectItem>
 							))}
-						</select>
-					)}
-				</div>
-			</td>
+						</SelectContent>
+					</Select>
+				)}
+			</TableCell>
 
 			{/* Created At */}
-			<td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
-				<div className="flex items-center justify-center">
-					<div className="w-2 h-2 bg-purple-400 rounded-full mr-2"></div>
-					{formatDate(category.createdAt)}
-				</div>
-			</td>
+			<TableCell className="text-center text-sm text-gray-600 border-r">
+				{formatDate(category.createdAt)}
+			</TableCell>
 
 			{/* Updated At */}
-			<td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 border-r border-gray-200">
-				<div className="flex items-center justify-center">
-					<div className="w-2 h-2 bg-orange-400 rounded-full mr-2"></div>
-					{formatDate(category.updatedAt)}
-				</div>
-			</td>
+			<TableCell className="text-center text-sm text-gray-600 border-r">
+				{formatDate(category.updatedAt)}
+			</TableCell>
 
-			{/* Action */}
-			<td className="px-6 py-2 whitespace-nowrap text-sm font-medium">
-				<div className="flex items-center justify-center gap-8">
-					{editState ? (
-						<>
-							<button
-								className="text-blue-600 hover:text-blue-800 transition-colors duration-200 cursor-pointer"
-								onClick={() => {
-									setEditData({ ...category });
-									setEditState(false);
-								}}>
-								<PencilIcon className="w-5 h-5 stroke-2" />
-							</button>
-							<button
-								className="text-red-600 hover:text-red-800 transition-colors duration-200 cursor-pointer"
-								onClick={() => handleDelete(category.id)}>
-								<TrashIcon className="w-5 h-5 stroke-2" />
-							</button>
-						</>
-					) : (
-						<>
-							<button
-								className="text-green-600 hover:text-green-800 transition-colors duration-200 cursor-pointer"
-								onClick={handleConfirm}>
-								<CheckIcon className="w-5 h-5 stroke-4" />
-							</button>
-							<button
-								className="text-red-600 hover:text-red-800 transition-colors duration-200 cursor-pointer"
-								onClick={() => {
-									setEditState(true);
-									setEditData({ ...category });
-								}}>
-								<XMarkIcon className="w-5 h-5 stroke-4" />
-							</button>
-						</>
-					)}
-				</div>
-			</td>
-		</GlobalRow>
+			{/* Actions */}
+			<TableCell className="text-center">
+				{editState ? (
+					<div className="flex items-center justify-center gap-2">
+						<Button
+							variant="outline"
+							size="icon"
+							className="h-8 w-8"
+							onClick={() => setEditState(false)}>
+							<PencilIcon className="h-4 w-4 text-blue-600" />
+						</Button>
+						<Button
+							variant="outline"
+							size="icon"
+							className="h-8 w-8"
+							onClick={() => handleDelete(category.id)}>
+							<TrashIcon className="h-4 w-4 text-red-600" />
+						</Button>
+					</div>
+				) : (
+					<div className="flex items-center justify-center gap-2">
+						<Button
+							variant="outline"
+							size="icon"
+							className="h-8 w-8"
+							onClick={handleConfirm}>
+							<CheckIcon className="h-4 w-4 text-green-600" />
+						</Button>
+						<Button
+							variant="outline"
+							size="icon"
+							className="h-8 w-8"
+							onClick={() => {
+								setEditData({ ...category });
+								setEditState(true);
+							}}>
+							<XMarkIcon className="h-4 w-4 text-gray-600" />
+						</Button>
+					</div>
+				)}
+			</TableCell>
+		</TableRow>
 	);
 };
 

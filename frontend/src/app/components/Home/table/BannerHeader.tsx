@@ -31,24 +31,6 @@ export default function BannerHeader({ activeTable }: { activeTable?: string | n
 
 	return (
 		<div>
-			<div className="relative mb-8 border-1 border-gray-200 rounded-lg shadow-sm">
-				{/* Header content */}
-				<div className="relative flex items-center gap-6 p-6">
-					<div className="relative">
-						<div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
-							<CubeIcon className="w-6 h-6 text-white" />
-						</div>
-						<div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full"></div>
-					</div>
-
-					<div>
-						<h2 className="text-3xl font-bold bg-gradient-to-r from-blue-700 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-							KK Electronic Overview
-						</h2>
-						<p className="text-gray-500 text-sm mt-1">ภาพรวมข้อมูลระบบ</p>
-					</div>
-				</div>
-			</div>
 
 			{/* Data counts grid */}
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-6">
