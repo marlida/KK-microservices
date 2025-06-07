@@ -3,13 +3,7 @@ import { useUserStore } from "@/store";
 import { User } from "@/types";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -72,9 +66,9 @@ const UserCreate: FC = () => {
 
 			{isOpen && (
 				<div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-					<Card className="w-full max-w-md">
+					<Card className="w-full max-w-md py-6">
 						<Form {...form}>
-							<form onSubmit={form.handleSubmit(onSubmit)}>
+							<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
 								<CardHeader>
 									<CardTitle>สร้างผู้ใช้</CardTitle>
 								</CardHeader>
@@ -86,7 +80,10 @@ const UserCreate: FC = () => {
 											<FormItem>
 												<FormLabel>ชื่อ</FormLabel>
 												<FormControl>
-													<Input placeholder="กรอกชื่อผู้ใช้" {...field} />
+													<Input
+														placeholder="กรอกชื่อผู้ใช้"
+														{...field}
+													/>
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -99,7 +96,10 @@ const UserCreate: FC = () => {
 											<FormItem>
 												<FormLabel>หมายเลขโทรศัพท์</FormLabel>
 												<FormControl>
-													<Input placeholder="กรอกหมายเลขโทรศัพท์" {...field} />
+													<Input
+														placeholder="กรอกหมายเลขโทรศัพท์"
+														{...field}
+													/>
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -107,7 +107,10 @@ const UserCreate: FC = () => {
 									/>
 								</CardContent>
 								<CardFooter className="flex justify-end gap-2">
-									<Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+									<Button
+										type="button"
+										variant="outline"
+										onClick={() => setIsOpen(false)}>
 										ยกเลิก
 									</Button>
 									<Button type="submit">สร้าง</Button>

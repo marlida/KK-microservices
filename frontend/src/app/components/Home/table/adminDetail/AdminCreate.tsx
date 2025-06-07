@@ -3,13 +3,7 @@ import { useAdminStore } from "@/store";
 import { Admin } from "@/types";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,7 +49,7 @@ const AdminCreate: FC = () => {
 			setIsOpen(false);
 			form.reset();
 		} catch (err) {
-			console.error(err); // Log the error for debugging
+			console.error(err);
 			showErrorToast(message || "เกิดข้อผิดพลาดในการสร้างผู้ดูแลระบบ");
 		}
 	};
@@ -72,9 +66,9 @@ const AdminCreate: FC = () => {
 
 			{isOpen && (
 				<div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-					<Card className="w-full max-w-md">
+					<Card className="w-full max-w-md py-6">
 						<Form {...form}>
-							<form onSubmit={form.handleSubmit(onSubmit)}>
+							<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
 								<CardHeader>
 									<CardTitle>สร้างผู้ดูแลระบบ</CardTitle>
 								</CardHeader>
@@ -86,7 +80,10 @@ const AdminCreate: FC = () => {
 											<FormItem>
 												<FormLabel>ชื่อ</FormLabel>
 												<FormControl>
-													<Input placeholder="กรอกชื่อผู้ดูแลระบบ" {...field} />
+													<Input
+														placeholder="กรอกชื่อผู้ดูแลระบบ"
+														{...field}
+													/>
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -99,7 +96,10 @@ const AdminCreate: FC = () => {
 											<FormItem>
 												<FormLabel>เบอร์โทรศัพท์</FormLabel>
 												<FormControl>
-													<Input placeholder="กรอกเบอร์โทรศัพท์" {...field} />
+													<Input
+														placeholder="กรอกเบอร์โทรศัพท์"
+														{...field}
+													/>
 												</FormControl>
 												<FormMessage />
 											</FormItem>
@@ -107,7 +107,10 @@ const AdminCreate: FC = () => {
 									/>
 								</CardContent>
 								<CardFooter className="flex justify-end gap-2">
-									<Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+									<Button
+										type="button"
+										variant="outline"
+										onClick={() => setIsOpen(false)}>
 										ยกเลิก
 									</Button>
 									<Button type="submit">สร้าง</Button>

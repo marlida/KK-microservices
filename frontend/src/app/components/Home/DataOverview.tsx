@@ -10,11 +10,11 @@ import CubeIcon from "@heroicons/react/24/outline/TableCellsIcon";
 import BannerHeader from "./table/BannerHeader";
 
 export default function DataOverview() {
-	const [activeTable, setActiveTable] = useState<string | null>("Admin");
+	const [activeTable, setActiveTable] = useState<string | null>("ผู้ดูแลระบบ");
 	const tables = ["ผู้ดูแลระบบ", "ผู้ใช้", "แบรนด์", "หมวดหมู่", "สินค้า", "รายการซ่อม"];
 
 	return (
-		<div className={"bg-white pt-20 w-full min-h-screen duration-500 flex flex-col px-8 "}>
+		<div className={"bg-white w-full min-h-screen duration-500 flex flex-col px-8 "}>
 			<BannerHeader activeTable={activeTable}/>
 			<div>
 				<div className="flex flex-wrap gap-4 my-6">
@@ -35,7 +35,7 @@ export default function DataOverview() {
 				{activeTable === "สินค้า" && <ProductTable />}
 				{activeTable === "รายการซ่อม" && <OrderTable />}
 				{!activeTable && (
-					<div className="flex flex-col items-center justify-center py-12 mt-40">
+					<div className="flex flex-col items-center justify-center py-12">
 						<CubeIcon className="w-12 h-12 animate-bounce mb-4 text-blue-500" />
 						<p className="font-medium text-lg text-gray-700">
 							เลือกตารางเพื่อดูข้อมูล

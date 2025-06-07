@@ -17,7 +17,7 @@ interface InputFilterProps {
 
 const InputFilter: FC<InputFilterProps> = ({ value, onChange, placeholder }) => {
 	return (
-		<div className="relative mb-4 w-1/2">
+		<div className="relative mb-4 w-1/3">
 			<Input
 				type="text"
 				value={value}

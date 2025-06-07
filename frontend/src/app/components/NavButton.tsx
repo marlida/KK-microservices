@@ -1,20 +1,17 @@
+import { Button } from "@/components/ui/button";
 import { FC } from "react";
 
 interface NavButtonProps {
-  label: string;
-  onClick: () => void;
+	label: string;
+	onClick: () => void;
 }
 
 const NavButton: FC<NavButtonProps> = ({ label, onClick }) => {
-  return (
-    <button 
-      onClick={onClick} 
-      className="px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-200 font-medium border border-gray-200 hover:border-gray-300 cursor-pointer"
-    >
-      {label}
-    </button>
-  );
+	return (
+		<Button onClick={onClick} variant="outline" className="text-gray-600 hover:text-gray-900">
+			{label}
+		</Button>
+	);
 };
-
 
 export default NavButton;

@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Noto_Sans_Thai } from "next/font/google";
-import "./globals.css";
 import Navbar from "@/app/components/Navbar";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
+import { Kanit } from "next/font/google";
 
-const notoSansThai = Noto_Sans_Thai({
-	subsets: ["latin", "thai"],
-	weight: ["100", "200", "300", "400", "500", "600", "700"],
-	variable: "--font-noto-sans-thai",
+import "./globals.css";
+
+const kanit = Kanit({
+	variable: "--font-kanit",
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -22,10 +23,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className="scroll-smooth">
-			<body className={`antialiased ${notoSansThai.variable}`}>
+			<body className={`antialiased ${kanit.variable}`}>
 				<Navbar />
 				{children}
-				<ToastContainer/>
+				<ToastContainer />
 			</body>
 		</html>
 	);

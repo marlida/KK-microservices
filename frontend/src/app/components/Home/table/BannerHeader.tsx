@@ -7,6 +7,8 @@ import {
 	CubeIcon,
 	WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface DataCounts {
 	label: string;
@@ -31,29 +33,22 @@ export default function BannerHeader({ activeTable }: { activeTable?: string | n
 
 	return (
 		<div>
-
 			{/* Data counts grid */}
-			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-6">
+			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-20">
 				{counts.map((item, index) => (
-					<div
+					<Card
 						key={index}
-						className={`group relative bg-white/80 backdrop-blur-sm border border-gray-100 rounded-2xl p-6 shadow-sm transition-all duration-300 
-						${activeTable === item.label && "shadow-2xl -translate-2 border-gray-200 bg-blue-50/80 backdrop-blur-lg"}
+						className={`group relative transition-all duration-300 hover:shadow-lg hover:-translate-y-1 
+						${activeTable === item.label ? "shadow-xl border-blue-200 bg-blue-50" : "hover:bg-gray-50"}
 						`}>
-						{/* Gradient overlay */}
-						<div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-						{/* Content */}
-						<div className="relative z-10">
+						<CardContent className="p-2">
 							<div className="flex items-center justify-between mb-3">
 								<div className="p-2.5 bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl group-hover:scale-110 transition-transform duration-300">
 									<item.icon className="w-5 h-5 text-blue-600 group-hover:text-purple-600 transition-colors duration-300" />
 								</div>
-								<div className="flex space-x-1">
-									<div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-									<div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse delay-400"></div>
-									<div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse delay-800"></div>
-								</div>
+								<Badge variant="secondary" className="bg-blue-100 text-blue-700">
+									Live
+								</Badge>
 							</div>
 
 							<div className="flex items-center justify-between">
@@ -75,8 +70,8 @@ export default function BannerHeader({ activeTable }: { activeTable?: string | n
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
+						</CardContent>
+					</Card>
 				))}
 			</div>
 		</div>
