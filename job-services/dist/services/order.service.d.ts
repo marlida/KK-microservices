@@ -4,7 +4,9 @@ export declare class orderService {
     static createOrder: (orderData: {
         name: string;
         adminId: number;
+        userId: number;
         productId: number;
+        quantity: number;
         status: string;
         customer_issue: string;
         technician_issue: string;
