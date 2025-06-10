@@ -1,6 +1,6 @@
 function Topbar() {
     return (
-        <header className="flex items-center justify-between bg-blue-900 p-4 text-white">
+        <header className="flex items-center justify-between bg-purple-900 p-4 text-white">
             <div>KK || SERVICE</div>
             <div>
                 <span className="text-white">
