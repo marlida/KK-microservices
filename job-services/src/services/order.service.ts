@@ -40,7 +40,9 @@ export class orderService {
     static createOrder = async (orderData: {
         name: string;
         adminId: number;
+        userId: number;
         productId: number;
+        quantity: number; 
         status: string;
         customer_issue: string;
         technician_issue: string;
@@ -48,8 +50,14 @@ export class orderService {
         total: number;
     }): Promise<Order> => {
         try {
+            const { adminId, productId, userId, ...restOfOrderData } = orderData;
             const newOrder = await prisma.order.create({
-                data: orderData,
+                data: {
+                    ...restOfOrderData,
+                    adminId: adminId,
+                    productId: productId,
+                    userId: userId,
+                },
             });
 
             // Clear cache after creating

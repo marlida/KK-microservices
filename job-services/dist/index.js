@@ -13,6 +13,7 @@ const order_route_1 = __importDefault(require("./routes/order.route"));
 const category_route_1 = __importDefault(require("./routes/category.route"));
 const brand_route_1 = __importDefault(require("./routes/brand.route"));
 const admin_route_1 = __importDefault(require("./routes/admin.route"));
+const export_route_1 = __importDefault(require("./routes/export.route"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
@@ -27,6 +28,7 @@ app.use('/jobs', order_route_1.default);
 app.use('/jobs', category_route_1.default);
 app.use('/jobs', brand_route_1.default);
 app.use('/jobs', admin_route_1.default);
+app.use('/jobs', export_route_1.default);
 const port = process.env.PORT;
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);

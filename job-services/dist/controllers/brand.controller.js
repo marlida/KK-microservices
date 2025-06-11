@@ -7,32 +7,32 @@ const createBrand = async (req, res) => {
         const { name } = req.body;
         if (!name) {
             res.status(400).json({
-                message: 'Invalid brand data provided',
+                message: 'ข้อมูลแบรนด์ไม่ถูกต้อง',
             });
             return;
         }
         const existingBrand = await brand_service_1.brandService.getBrandExists(name);
         if (existingBrand) {
             res.status(400).json({
-                message: 'Brand already exists',
+                message: 'แบรนด์นี้มีอยู่แล้ว',
             });
             return;
         }
         const newBrand = await brand_service_1.brandService.createBrand({ name });
         res.status(201).json({
-            message: 'Brand created successfully',
+            message: 'สร้างแบรนด์สำเร็จ',
             data: newBrand,
         });
     }
     catch (error) {
         if (error instanceof Error) {
             res.status(500).json({
-                message: `Error creating brand: ${error.message}`,
+                message: `เกิดข้อผิดพลาดในการสร้างแบรนด์: ${error.message}`,
             });
         }
         else {
             res.status(500).json({
-                message: 'Error creating brand: Unknown error',
+                message: 'เกิดข้อผิดพลาดในการสร้างแบรนด์: ข้อผิดพลาดที่ไม่ทราบสาเหตุ',
             });
         }
     }
@@ -42,19 +42,19 @@ const getBrand = async (req, res) => {
     try {
         const brandData = await brand_service_1.brandService.getBrand();
         res.status(200).json({
-            message: 'Brand data retrieved successfully',
+            message: 'ดึงข้อมูลแบรนด์สำเร็จ',
             data: brandData,
         });
     }
     catch (error) {
         if (error instanceof Error) {
             res.status(500).json({
-                message: `Error retrieving brand data: ${error.message}`,
+                message: `เกิดข้อผิดพลาดในการดึงข้อมูลแบรนด์: ${error.message}`,
             });
         }
         else {
             res.status(500).json({
-                message: 'Error retrieving brand data: Unknown error',
+                message: 'เกิดข้อผิดพลาดในการดึงข้อมูลแบรนด์: ข้อผิดพลาดที่ไม่ทราบสาเหตุ',
             });
         }
     }
@@ -72,24 +72,24 @@ const getBrandById = async (req, res) => {
         const brand = await brand_service_1.brandService.getBrandById(parseInt(id), options);
         if (!brand) {
             res.status(404).json({
-                message: 'Brand not found',
+                message: 'ไม่พบแบรนด์',
             });
             return;
         }
         res.status(200).json({
-            message: 'Brand retrieved successfully',
+            message: 'ดึงข้อมูลแบรนด์สำเร็จ',
             data: brand,
         });
     }
     catch (error) {
         if (error instanceof Error) {
             res.status(500).json({
-                message: `Error retrieving brand: ${error.message}`,
+                message: `เกิดข้อผิดพลาดในการดึงข้อมูลแบรนด์: ${error.message}`,
             });
         }
         else {
             res.status(500).json({
-                message: 'Error retrieving brand: Unknown error',
+                message: 'เกิดข้อผิดพลาดในการดึงข้อมูลแบรนด์: ข้อผิดพลาดที่ไม่ทราบสาเหตุ',
             });
         }
     }
@@ -101,32 +101,32 @@ const updateBrand = async (req, res) => {
         const { id } = req.params;
         if (!id || !name) {
             res.status(400).json({
-                message: 'Brand ID and  name are required',
+                message: 'จำเป็นต้องมี ID และชื่อแบรนด์',
             });
             return;
         }
         const brandNotFound = await brand_service_1.brandService.getBrandById(parseInt(id));
         if (!brandNotFound) {
             res.status(404).json({
-                message: 'Brand with this ID does not exist',
+                message: 'ไม่พบแบรนด์ที่มี ID นี้',
             });
             return;
         }
         const updatedBrand = await brand_service_1.brandService.updateBrand(parseInt(id), { name });
         res.status(200).json({
-            message: 'Brand updated successfully',
+            message: 'อัปเดตแบรนด์สำเร็จ',
             data: updatedBrand,
         });
     }
     catch (error) {
         if (error instanceof Error) {
             res.status(500).json({
-                message: `Error updating brand: ${error.message}`,
+                message: `เกิดข้อผิดพลาดในการอัปเดตแบรนด์: ${error.message}`,
             });
         }
         else {
             res.status(500).json({
-                message: 'Error updating brand: Unknown error',
+                message: 'เกิดข้อผิดพลาดในการอัปเดตแบรนด์: ข้อผิดพลาดที่ไม่ทราบสาเหตุ',
             });
         }
     }
@@ -137,25 +137,25 @@ const deleteBrand = async (req, res) => {
         const { id } = req.params;
         if (!id) {
             res.status(400).json({
-                message: 'Brand ID is required',
+                message: 'จำเป็นต้องมี ID แบรนด์',
             });
             return;
         }
         const deletedBrand = await brand_service_1.brandService.deleteBrand(parseInt(id));
         res.status(200).json({
-            message: 'Brand deleted successfully',
+            message: 'ลบแบรนด์สำเร็จ',
             data: deletedBrand,
         });
     }
     catch (error) {
         if (error instanceof Error) {
             res.status(500).json({
-                message: `Error deleting brand: ${error.message}`,
+                message: `เกิดข้อผิดพลาดในการลบแบรนด์: ${error.message}`,
             });
         }
         else {
             res.status(500).json({
-                message: 'Error deleting brand: Unknown error',
+                message: 'เกิดข้อผิดพลาดในการลบแบรนด์: ข้อผิดพลาดที่ไม่ทราบสาเหตุ',
             });
         }
     }

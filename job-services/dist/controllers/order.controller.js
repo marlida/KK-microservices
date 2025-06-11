@@ -4,7 +4,7 @@ exports.deleteOrder = exports.updateOrder = exports.getOrderById = exports.getOr
 const order_service_1 = require("../services/order.service");
 const createOrder = async (req, res) => {
     try {
-        const { name, adminId, productId, quantity, status, customer_issue, technician_issue, deposit, total, } = req.body;
+        const { name, adminId, productId, quantity, userId, status, customer_issue, technician_issue, deposit, total, } = req.body;
         if (!name || !adminId || !productId) {
             res.status(400).json({
                 message: "ข้อมูลออเดอร์ไม่ถูกต้อง",
@@ -22,6 +22,8 @@ const createOrder = async (req, res) => {
             name,
             adminId: parseInt(adminId),
             productId: parseInt(productId),
+            userId: parseInt(userId),
+            quantity: parseInt(quantity),
             status,
             customer_issue,
             technician_issue,

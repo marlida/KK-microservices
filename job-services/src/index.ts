@@ -9,6 +9,7 @@ import orderRoutes from './routes/order.route';
 import categoryRoutes from './routes/category.route';
 import brandRoutes from './routes/brand.route';
 import adminRoutes from './routes/admin.route';
+import exportRoutes from './routes/export.route';
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/jobs', orderRoutes);
 app.use('/jobs', categoryRoutes);
 app.use('/jobs', brandRoutes);
 app.use('/jobs', adminRoutes);
+app.use('/jobs', exportRoutes);
 
 const port = process.env.PORT;
 app.listen(port, () => {

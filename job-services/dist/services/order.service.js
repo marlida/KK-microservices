@@ -72,8 +72,14 @@ orderService.decreaseProductQuantity = async (productId, quantity) => {
 };
 orderService.createOrder = async (orderData) => {
     try {
+        const { adminId, productId, userId, ...restOfOrderData } = orderData;
         const newOrder = await db_1.default.order.create({
-            data: orderData,
+            data: {
+                ...restOfOrderData,
+                adminId: adminId,
+                productId: productId,
+                userId: userId,
+            },
         });
         // Clear cache after creating
         await (0, redis_1.clearRelatedProductCache)();
