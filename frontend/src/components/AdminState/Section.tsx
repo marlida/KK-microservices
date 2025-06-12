@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import MockTable from "@/components/datatable/mockTable";
 
 const AdminSection: React.FC = () => {
     const [currentSection, setCurrentSection] = useState<"section1" | "section2">("section1");
@@ -34,12 +35,14 @@ const AdminSection: React.FC = () => {
 
             <div className="mt-20">
                 <div className="mx-auto w-full max-w-[95%]">
-                    <div className="w-full rounded-lg bg-white  ">
-                        <p className="text-gray-600 text-lg">
-                            {currentSection === "section1"
-                                ? "Setion 1 Content Placeholder"
-                                : "Section 2 Content Placeholder"}
-                        </p>
+                    <div className="w-full rounded-lg bg-white">
+                        {currentSection === "section1" ? (
+                            <MockTable />
+                        ) : (
+                            <p className="text-gray-600 text-lg p-6">
+                                Section 2 Content Placeholder
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>
