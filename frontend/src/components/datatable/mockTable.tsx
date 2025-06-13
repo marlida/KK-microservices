@@ -17,8 +17,8 @@ const mockData: TableData[] = [
     brand: "Nike",
     category: "Shoes",
     product: "Air Max 2023",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: "2023-01-10T09:15:00.000Z",
+    updatedAt: "2023-01-15T14:30:00.000Z",
   },
   {
     id: 2,
@@ -27,8 +27,8 @@ const mockData: TableData[] = [
     brand: "Adidas",
     category: "Clothing",
     product: "Ultra Boost",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: "2023-02-05T11:20:00.000Z",
+    updatedAt: "2023-02-10T16:45:00.000Z",
   },
   {
     id: 3,
@@ -37,8 +37,8 @@ const mockData: TableData[] = [
     brand: "Puma",
     category: "Accessories",
     product: "Sports Bag Pro",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: "2023-03-12T08:00:00.000Z",
+    updatedAt: "2023-03-18T13:10:00.000Z",
   },
   {
     id: 4,
@@ -47,8 +47,8 @@ const mockData: TableData[] = [
     brand: "Puma",
     category: "Accessories",
     product: "Sports Bag Pro",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: "2023-04-01T10:30:00.000Z",
+    updatedAt: "2023-04-05T15:25:00.000Z",
   },
 ];
 
