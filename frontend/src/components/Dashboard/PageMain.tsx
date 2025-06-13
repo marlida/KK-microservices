@@ -1,9 +1,12 @@
 import { Card } from "../ui/card";
+import { Admin } from "./components/Admin";
 
 function PageMain() {
     return (
-        <div className="p-6">
-            <Card>PageMain</Card>
+        <div className="p-4">
+            <Card className="rounded-md">
+                <Admin />
+            </Card>
         </div>
     );
 }

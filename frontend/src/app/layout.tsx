@@ -4,6 +4,13 @@ import Sidebar from "@/components/Layout/Sidebar";
 import Topbar from "@/components/Layout/Topbar";
 import { Toaster } from "@/components/ui/sonner";
 import { CircleCheck } from "lucide-react";
+import { Noto_Sans_Thai } from 'next/font/google'
+
+const notoSansThai = Noto_Sans_Thai({
+  subsets: ['thai', 'latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-noto-sans-thai'
+})
 
 export const metadata: Metadata = {
     title: "KK || SERVICE",
@@ -16,7 +23,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="th">
+        <html lang="th" className={notoSansThai.variable}>
             <body className="flex h-screen w-screen flex-col overflow-hidden font-sans antialiased">
                 <Topbar />
                 <div className="flex grow overflow-hidden">

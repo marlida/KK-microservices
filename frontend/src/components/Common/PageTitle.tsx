@@ -1,10 +1,10 @@
 import { Card } from "../ui/card";
 
-function PageTitle() {
+function PageTitle({ title }: { title: string }) {
     return (
         <Card>
             <div>
-                <h1>Dashboard</h1>
+                <h1 className="text-gray-800 font-semibold">{title}</h1>
             </div>
         </Card>
     );
