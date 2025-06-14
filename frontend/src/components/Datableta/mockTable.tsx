@@ -1,3 +1,6 @@
+import React from "react";
+
+// Define the data structure for each row
 interface TableData {
   id: number;
   user: string;
@@ -9,6 +12,7 @@ interface TableData {
   updatedAt: string;
 }
 
+// Mock data
 const mockData: TableData[] = [
   {
     id: 1,
@@ -17,7 +21,7 @@ const mockData: TableData[] = [
     brand: "Nike",
     category: "Shoes",
     product: "Air Max 2023",
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(2023, 0, 1).toISOString(), // January 1, 2023
     updatedAt: new Date().toISOString(),
   },
   {
@@ -27,7 +31,7 @@ const mockData: TableData[] = [
     brand: "Adidas",
     category: "Clothing",
     product: "Ultra Boost",
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(2023, 1, 15).toISOString(), // February 15, 2023
     updatedAt: new Date().toISOString(),
   },
   {
@@ -37,7 +41,7 @@ const mockData: TableData[] = [
     brand: "Puma",
     category: "Accessories",
     product: "Sports Bag Pro",
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(2023, 2, 28).toISOString(), // March 28, 2023
     updatedAt: new Date().toISOString(),
   },
   {
@@ -47,19 +51,19 @@ const mockData: TableData[] = [
     brand: "Puma",
     category: "Accessories",
     product: "Sports Bag Pro",
-    createdAt: new Date().toISOString(),
+    createdAt: new Date(2023, 2, 28).toISOString(), // March 28, 2023
     updatedAt: new Date().toISOString(),
   },
 ];
 
-// structure of each column in the table
-
+// Define the structure of each column
 type Column = {
   key: keyof TableData;
   header: string;
-  render?: (value: any) => React.ReactNode;
+  render?: (value: TableData[keyof TableData]) => React.ReactNode;
 };
 
+// Define the table columns
 const columns: Column[] = [
   { key: "id", header: "ID" },
   { key: "user", header: "User" },
@@ -79,31 +83,40 @@ const columns: Column[] = [
   },
 ];
 
-const MockTable = () => {
+// The mock table component
+const MockTable = ({ className = "" }: { className?: string }) => {
   return (
-    <div className="table-container">
+    <div className={`overflow-x-auto ${className}`}>
       <table className="min-w-full border-collapse border border-gray-200">
         <thead>
           <tr className="bg-gray-100">
             {columns.map((column) => (
-              <th key={column.key} className="border p-2">
+              <th key={column.key} className="border p-2 text-left" scope="col">
                 {column.header}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {mockData.map((row) => (
-            <tr key={row.id} className="hover:bg-gray-50">
-              {columns.map((column) => (
-                <td key={`${row.id}-${column.key}`} className="border p-2">
-                  {column.render
-                    ? column.render(row[column.key])
-                    : row[column.key]}
-                </td>
-              ))}
+          {mockData.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length} className="text-center p-4">
+                No data available
+              </td>
             </tr>
-          ))}
+          ) : (
+            mockData.map((row) => (
+              <tr key={row.id} className="hover:bg-gray-50">
+                {columns.map((column) => (
+                  <td key={`${row.id}-${column.key}`} className="border p-2">
+                    {column.render
+                      ? column.render(row[column.key])
+                      : row[column.key]}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

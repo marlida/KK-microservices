@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import MockTable from "@/components/datatable/mockTable";
+import MockTable from "@/components/Datableta/mockTable";
+import Form  from "@/components/SubForm/Form";
 
 const AdminSection: React.FC = () => {
     const [currentSection, setCurrentSection] = useState<"section1" | "section2">("section1");
@@ -39,9 +40,7 @@ const AdminSection: React.FC = () => {
                         {currentSection === "section1" ? (
                             <MockTable />
                         ) : (
-                            <p className="text-gray-600 text-lg p-6">
-                                Section 2 Content Placeholder
-                            </p>
+                            <Form />
                         )}
                     </div>
                 </div>
