@@ -4,7 +4,7 @@ import PageMain from "@/components/Dashboard/PageMain";
 function Home() {
     return (
         <div >
-            <PageTitle />
+            <PageTitle  title={"หน้าแรก"}/>
             <PageMain />
         </div>
     );
