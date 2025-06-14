@@ -4,13 +4,14 @@ import Sidebar from "@/components/Layout/Sidebar";
 import Topbar from "@/components/Layout/Topbar";
 import { Toaster } from "@/components/ui/sonner";
 import { CircleCheck } from "lucide-react";
-import { Noto_Sans_Thai } from 'next/font/google'
+import { Noto_Sans_Thai } from "next/font/google";
+import { ThemeProvider } from "@/components/Layout/theme-provider";
 
 const notoSansThai = Noto_Sans_Thai({
-  subsets: ['thai', 'latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-noto-sans-thai'
-})
+    subsets: ["thai", "latin"],
+    weight: ["400", "500", "600", "700"],
+    variable: "--font-noto-sans-thai",
+});
 
 export const metadata: Metadata = {
     title: "KK || SERVICE",
@@ -23,28 +24,33 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="th" className={notoSansThai.variable}>
+        <html lang="th" className={notoSansThai.variable} suppressHydrationWarning>
             <body className="flex h-screen w-screen flex-col overflow-hidden font-sans antialiased">
-                <Topbar />
-                <div className="flex grow overflow-hidden">
-                    <Sidebar />
-                    <main className="flex grow flex-col overflow-scroll bg-gray-50">
-                        {children}
-                    </main>
-                </div>
-
-                <Toaster
-                    position="top-center"
-                    icons={{
-                        success: <CircleCheck />,
-                    }}
-                    toastOptions={{
-                        className: "font-sans",
-                        classNames: {
-                            success: "toast_success",
-                        },
-                    }}
-                />
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange>
+                    <Topbar />
+                    <div className="flex grow overflow-hidden">
+                        <Sidebar />
+                        <main className="flex grow flex-col overflow-scroll bg-gray-50">
+                            {children}
+                        </main>
+                    </div>
+                    <Toaster
+                        position="top-center"
+                        icons={{
+                            success: <CircleCheck />,
+                        }}
+                        toastOptions={{
+                            className: "font-sans",
+                            classNames: {
+                                success: "toast_success",
+                            },
+                        }}
+                    />
+                </ThemeProvider>
             </body>
         </html>
     );

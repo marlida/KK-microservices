@@ -28,8 +28,8 @@ function Sidebar() {
             {iconic.map((item, index) => (
                 <a href={item.path} key={index}>
                     <div
-                        className={`cursor-pointer p-4 text-purple-900 transition-all duration-200 ${
-                            isActive(item.path) ? "bg-purple-200" : "hover:bg-purple-100"
+                        className={`cursor-pointer p-4 text-purple-900 transition-all duration-200 dark:text-white ${
+                            isActive(item.path) ? "bg-purple-200 dark:bg-zinc-800" : "hover:bg-purple-100 hover:dark:bg-zinc-700"
                         }`}>
                         <item.icon size={24} />
                     </div>

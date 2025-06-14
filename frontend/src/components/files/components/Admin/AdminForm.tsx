@@ -1,25 +1,37 @@
-"use client";
-
 import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
+// React Hook Form
+import { useForm } from "react-hook-form";
+
+// Validation schema
+import { z } from "zod";
+import { formSchema } from "@/types/admin";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// UI components
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
 
-const formSchema = z.object({
-    name: z.string().min(2, {
-        message: "ชื่ออย่างน้อย 2 ตัวอักษร",
-    }),
-    tel: z.string().min(10, {
-        message: "เบอร์โทรศัพท์ต้องมีอย่างน้อย 10 หลัก",
-    }),
-});
+// Components
+import AdminTable from "./AdminTable";
+
+// Services
+import { AdminServices } from "@/services/adminServices";
 
 export function AdminForm() {
-    const [data, setData] = React.useState<z.infer<typeof formSchema> | null>(null);
+    // State to manage form data and messages
+    const [message, setMessage] = React.useState<string | null>(null);
+
+    // Initialize the form with validation schema
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -28,20 +40,25 @@ export function AdminForm() {
         },
     });
 
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
-        setData(data);
-    };
-
-    React.useEffect(() => {
-        if (data) {
-            console.log("Submitted Data:", data);
+    // Function to handle form submission
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        try {
+            const res = await AdminServices.createAdmin(data);
+            await AdminServices.fetchAdminData();
+            setMessage(res);
+            form.reset();
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            setMessage("เกิดข้อผิดพลาดในการส่งข้อมูล");
         }
-    }, [data]);
+    };
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" autoComplete="off">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" autoComplete="off">
                 <FormDescription>สร้างฟอร์มสำหรับกรอกข้อมูลผู้ดูแลระบบ</FormDescription>
+
+                {/* Form fields for name */}
                 <FormField
                     control={form.control}
                     name="name"
@@ -55,6 +72,8 @@ export function AdminForm() {
                         </FormItem>
                     )}
                 />
+
+                {/* Form field for telephone */}
                 <FormField
                     control={form.control}
                     name="tel"
@@ -68,8 +87,16 @@ export function AdminForm() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">ส่งข้อมูล</Button>
+
+                {/* Submit button */}
+                <Button type="submit" className="bg-purple-900 hover:bg-purple-800">
+                    ส่งข้อมูล
+                </Button>
+                {message && <div className="text-sm text-green-600">{message}</div>}
             </form>
+
+            {/* Admin Table to display existing admins */}
+            <AdminTable />
         </Form>
     );
 }

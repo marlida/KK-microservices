@@ -22,22 +22,20 @@ function FilePage() {
 
     return (
         <>
-            <PageTitle title="File Management" />
-            <div className="relative p-6">
+            <PageTitle title="หน้าสร้างข้อมูล" />
+            <div className="relative p-6 dark:bg-zinc-900">
                 <div className="relative z-10 flex items-center gap-2">
                     {sections.map(section => (
                         <Button
                             key={section.name}
                             variant="none"
-                            className={`relative rounded-none rounded-tl-sm rounded-tr-sm border px-7 pt-6 pb-4 ${
+                            className={`relative rounded-none rounded-tl-sm rounded-tr-sm border px-7 pt-6 pb-4 dark:bg-zinc-900 ${
                                 activeSection === section.name
                                     ? "z-20 border-b-0 bg-white"
                                     : "bg-gray-50"
                             }`}
                             onClick={() => {
-                                console.log(
-                                    `Switching to ${section.name} section`
-                                );
+                                console.log(`Switching to ${section.name} section`);
                                 setActiveSection(section.name);
                             }}>
                             {section.name}
@@ -46,10 +44,7 @@ function FilePage() {
                 </div>
 
                 <Card className="relative z-0 -mt-px rounded-md rounded-tl-none shadow-xs">
-                    {
-                        sections.find(section => section.name === activeSection)
-                            ?.component
-                    }
+                    {sections.find(section => section.name === activeSection)?.component}
                 </Card>
             </div>
         </>
