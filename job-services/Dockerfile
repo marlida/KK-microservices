@@ -22,13 +22,9 @@ FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-
-# Copy node_modules from builder stage instead of installing again
+# Copy everything from builder
+COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
-
-# Copy built application
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 
