@@ -1,4 +1,7 @@
-import { Card } from "../ui/card";
+"use client";
+
+import { usePathname } from "next/navigation";
+
 import { GitFork } from "lucide-react";
 import { ChartNoAxesCombined } from "lucide-react";
 import { FileChartColumn } from "lucide-react";
@@ -6,26 +9,34 @@ import { BellRing } from "lucide-react";
 import { UserRoundCog } from "lucide-react";
 
 const iconic = [
-    {icon: GitFork, path:"/"},
-    {icon: ChartNoAxesCombined, path:"/"},
-    {icon: FileChartColumn, path:"/"},
-    {icon: BellRing, path:"/"},
-    {icon: UserRoundCog, path:"/admin"}
+    { icon: GitFork, path: "/" },
+    { icon: ChartNoAxesCombined, path: "/dashboard" },
+    { icon: FileChartColumn, path: "/files" },
+    { icon: BellRing, path: "/notifications" },
+    { icon: UserRoundCog, path: "/admin" },
 ];
 
 function Sidebar() {
+    const pathname = usePathname();
+
+    const isActive = (path: string) => {
+        return pathname === path;
+    };
+
     return (
-        <Card className="py-100vh px-10">
-            <div className="flex flex-col gap-10">
-                {iconic.map((item, index) => (
-                    <a href={item.path} key={index}>
-                        <div className="cursor-pointer rounded-lg p-3 text-gray-500 transition-all duration-200 hover:bg-blue-500 hover:text-white">
-                            <item.icon size={24} />
-                        </div>
-                    </a>
-                ))}
-            </div>
-        </Card>
+        <div className="flex flex-col">
+            {iconic.map((item, index) => (
+                <a href={item.path} key={index}>
+                    <div
+                        className={`cursor-pointer p-4 text-purple-900 transition-all duration-200 ${
+                            isActive(item.path) ? "bg-purple-200" : "hover:bg-purple-100"
+                        }`}>
+                        <item.icon size={24} />
+                    </div>
+                    {isActive(item.path) && <div className="h-0.5 bg-purple-500"></div>}
+                </a>
+            ))}
+        </div>
     );
 }
 
