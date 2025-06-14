@@ -1,0 +1,65 @@
+
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    # depends_on:
+    # #   - frontend
+    #   - job-services
+    networks:
+      - kk-network
+
+  # frontend:
+  #   image: frontend:latest
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - NEXT_PUBLIC_API_URL=http://localhost/api
+  #   networks:
+  #     - kk-network
+
+  # job-services:
+  #   image: job-services:latest
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - DATABASE_URL=postgresql://user:password@db:5432/jobdb
+  #     - REDIS_URL=redis://redis:6379
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   networks:
+  #     - kk-network
+
+#   db:
+#     image: postgres:15-alpine
+#     environment:
+#       - POSTGRES_USER=user
+#       - POSTGRES_PASSWORD=password
+#       - POSTGRES_DB=jobdb
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     ports:
+#       - "5432:5432"
+#     networks:
+#       - kk-network
+
+#   redis:
+#     image: redis:7-alpine
+#     ports:
+#       - "6379:6379"
+#     networks:
+#       - kk-network
+
+# volumes:
+#   postgres_data:
+
+networks:
+  kk-network:
+    driver: bridge
+    external: true
