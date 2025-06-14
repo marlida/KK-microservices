@@ -1,20 +1,13 @@
 "use client";
 
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -25,7 +18,8 @@ const formSchema = z.object({
     }),
 });
 
-export function Admin() {
+export function AdminForm() {
+    const [data, setData] = React.useState<z.infer<typeof formSchema> | null>(null);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -35,19 +29,19 @@ export function Admin() {
     });
 
     const onSubmit = (data: z.infer<typeof formSchema>) => {
-        console.log(data);
+        setData(data);
     };
+
+    React.useEffect(() => {
+        if (data) {
+            console.log("Submitted Data:", data);
+        }
+    }, [data]);
 
     return (
         <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
-                autoComplete="off"
-            >
-                <FormDescription>
-                    สร้างฟอร์มสำหรับกรอกข้อมูลผู้ดูแลระบบ
-                </FormDescription>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" autoComplete="off">
+                <FormDescription>สร้างฟอร์มสำหรับกรอกข้อมูลผู้ดูแลระบบ</FormDescription>
                 <FormField
                     control={form.control}
                     name="name"
@@ -55,10 +49,7 @@ export function Admin() {
                         <FormItem>
                             <FormLabel>ชื่อ</FormLabel>
                             <FormControl>
-                                <Input
-                                    placeholder="กรอกชื่อของคุณ"
-                                    {...field}
-                                />
+                                <Input placeholder="กรอกชื่อของคุณ" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -71,10 +62,7 @@ export function Admin() {
                         <FormItem>
                             <FormLabel>เบอร์โทรศัพท์</FormLabel>
                             <FormControl>
-                                <Input
-                                    placeholder="กรอกเบอร์โทรศัพท์ของคุณ"
-                                    {...field}
-                                />
+                                <Input placeholder="กรอกเบอร์โทรศัพท์ของคุณ" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

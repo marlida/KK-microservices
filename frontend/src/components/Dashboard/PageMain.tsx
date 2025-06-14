@@ -1,5 +1,5 @@
 import { Card } from "../ui/card";
-import { Admin } from "./components/Admin";
+import { Admin } from "../files/components/Admin/AdminForm";
 
 function PageMain() {
     return (
