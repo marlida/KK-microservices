@@ -3,6 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-regal-blue: #012159;
+  --color-sec-blue: #253B80;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

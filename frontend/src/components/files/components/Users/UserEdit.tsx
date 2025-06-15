@@ -26,59 +26,57 @@ import { Input } from "@/components/ui/input";
 // Form handling
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateAdminSchema, type UpdateAdminInput } from "./schema";
+import { updateUserSchema, type UpdateUserInput } from "./schema";
 
 // Types and Services
-import { Admin } from "@/types/admin";
-import { AdminServices } from "@/services/adminServices";
+import { User } from "@/types/user";
+import { UserServices } from "@/services/userServices";
 import { toast } from "sonner";
 import { SquarePen, Loader2, Save } from "lucide-react";
 
-interface AdminEditProps {
-    admin: Admin;
+interface UserEditProps {
+    user: User;
     onUpdateSuccess?: () => void;
 }
 
-export function AdminEdit({ admin, onUpdateSuccess }: AdminEditProps) {
+export function UserEdit({ user, onUpdateSuccess }: UserEditProps) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-    const form = useForm<UpdateAdminInput>({
-        resolver: zodResolver(updateAdminSchema),
+    const form = useForm<UpdateUserInput>({
+        resolver: zodResolver(updateUserSchema),
         defaultValues: {
-            id: admin.id.toString(),
-            name: admin.name,
-            tel: admin.tel,
+            id: user.id.toString(),
+            name: user.name,
+            tel: user.tel,
         },
     });
 
-    const onSubmit = async (data: UpdateAdminInput) => {
+    const onSubmit = async (data: UpdateUserInput) => {
         try {
             setIsSubmitting(true);
 
-            await AdminServices.updateAdmin(data.id, {
+            await UserServices.updateUser(data.id, {
                 name: data.name,
                 tel: data.tel,
             });
 
             toast.success("สำเร็จ!", {
-                description: "ข้อมูลผู้ดูแลระบบได้รับการอัปเดตเรียบร้อยแล้ว",
+                description: "ข้อมูลผู้ใช้ได้รับการอัปเดตเรียบร้อยแล้ว",
                 duration: 3000,
             });
 
             setIsOpen(false);
-            
+
             // Call parent callback to refresh data
             if (onUpdateSuccess) {
                 onUpdateSuccess();
             }
-
         } catch (error) {
-            console.error('Admin update error:', error);
+            console.error("User update error:", error);
             toast.error("เกิดข้อผิดพลาด", {
-                description: error instanceof Error 
-                    ? error.message 
-                    : "ไม่สามารถอัปเดตข้อมูลผู้ดูแลระบบได้",
+                description:
+                    error instanceof Error ? error.message : "ไม่สามารถอัปเดตข้อมูลผู้ใช้ได้",
                 duration: 4000,
             });
         } finally {
@@ -90,12 +88,12 @@ export function AdminEdit({ admin, onUpdateSuccess }: AdminEditProps) {
     React.useEffect(() => {
         if (isOpen) {
             form.reset({
-                id: admin.id.toString(),
-                name: admin.name,
-                tel: admin.tel,
+                id: user.id.toString(),
+                name: user.name,
+                tel: user.tel,
             });
         }
-    }, [isOpen, admin, form]);
+    }, [isOpen, user, form]);
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -108,10 +106,10 @@ export function AdminEdit({ admin, onUpdateSuccess }: AdminEditProps) {
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <SquarePen size={20} className="text-blue-600" />
-                        แก้ไขข้อมูลผู้ดูแลระบบ
+                        แก้ไขข้อมูลผู้ใช้
                     </DialogTitle>
                     <DialogDescription>
-                        แก้ไขข้อมูลผู้ดูแลระบบ ระบบจะตรวจสอบข้อมูลอัตโนมัติ
+                        แก้ไขข้อมูลผู้ใช้ ระบบจะตรวจสอบข้อมูลอัตโนมัติ
                     </DialogDescription>
                 </DialogHeader>
 
@@ -126,17 +124,17 @@ export function AdminEdit({ admin, onUpdateSuccess }: AdminEditProps) {
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>ชื่อผู้ดูแลระบบ</FormLabel>
+                                    <FormLabel>ชื่อผู้ใช้</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="กรอกชื่อผู้ดูแลระบบ"
+                                            placeholder="กรอกชื่อผู้ใช้"
                                             disabled={isSubmitting}
                                             className="focus:border-blue-500 focus:ring-blue-500"
                                             {...field}
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        ชื่อจริงของผู้ดูแลระบบ 2-100 ตัวอักษร
+                                        ชื่อจริงของผู้ใช้ 2-100 ตัวอักษร
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
@@ -167,21 +165,19 @@ export function AdminEdit({ admin, onUpdateSuccess }: AdminEditProps) {
                         />
 
                         {/* Form Actions */}
-                        <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 pt-4">
+                        <div className="flex flex-col-reverse pt-4 sm:flex-row sm:justify-end sm:space-x-2">
                             <Button
                                 type="button"
                                 variant="outline"
                                 onClick={() => setIsOpen(false)}
                                 disabled={isSubmitting}
-                                className="mt-2 sm:mt-0"
-                            >
+                                className="mt-2 sm:mt-0">
                                 ยกเลิก
                             </Button>
                             <Button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="bg-regal-blue hover:bg-regal-blue/90"
-                            >
+                                className="bg-regal-blue hover:bg-regal-blue/90">
                                 {isSubmitting ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />

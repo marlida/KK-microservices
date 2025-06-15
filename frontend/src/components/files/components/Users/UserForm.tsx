@@ -18,35 +18,35 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 // Form handling
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createAdminSchema, type CreateAdminInput } from "./schema";
+import { createUserSchema, type CreateUserInput } from "./schema";
 
 // Components
-import AdminTable from "./AdminTable";
+import UserTable from "./UserTable";
 
 // Services
-import { AdminServices } from "@/services/adminServices";
+import { UserServices } from "@/services/userServices";
 import { toast } from "sonner";
 import { Loader2, UserPlus } from "lucide-react";
 
-export function AdminForm() {
+export function UserForm() {
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-    const form = useForm<CreateAdminInput>({
-        resolver: zodResolver(createAdminSchema),
+    const form = useForm<CreateUserInput>({
+        resolver: zodResolver(createUserSchema),
         defaultValues: {
             name: "",
             tel: "",
         },
     });
 
-    const onSubmit = async (data: CreateAdminInput) => {
+    const onSubmit = async (data: CreateUserInput) => {
         try {
             setIsSubmitting(true);
 
-            await AdminServices.createAdmin(data);
+            await UserServices.createUser(data);
 
             toast.success("สร้างโปรไฟล์สำเร็จ!", {
-                description: "สร้างผู้ดูแลระบบเรียบร้อยแล้ว",
+                description: "สร้างผู้ใช้เรียบร้อยแล้ว",
                 duration: 3000,
             });
 
@@ -54,8 +54,7 @@ export function AdminForm() {
             form.reset();
         } catch (error) {
             toast.error("เกิดข้อผิดพลาด", {
-                description:
-                    error instanceof Error ? error.message : "ไม่สามารถสร้างผู้ดูแลระบบได้",
+                description: error instanceof Error ? error.message : "ไม่สามารถสร้างผู้ใช้ได้",
                 duration: 4000,
             });
         } finally {
@@ -69,13 +68,13 @@ export function AdminForm() {
                 <CardHeader>
                     <CardTitle className="my-3 flex items-center gap-2 text-blue-900">
                         <UserPlus size={20} />
-                        เพิ่มผู้ดูแลระบบใหม่
+                        เพิ่มผู้ใช้ใหม่
                     </CardTitle>
-                    <CardDescription>กรอกข้อมูลเพื่อสร้างบัญชีผู้ดูแลระบบใหม่</CardDescription>
+                    <CardDescription>กรอกข้อมูลเพื่อสร้างบัญชีผู้ใช้ใหม่</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 my-4">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="my-4 space-y-6">
                             {/* Name Field */}
                             <FormField
                                 control={form.control}
@@ -121,7 +120,7 @@ export function AdminForm() {
                                 <Button
                                     type="submit"
                                     size="lg"
-                                    className="mb-4 w-full bg-regal-blue hover:bg-regal-blue/90 text-white"
+                                    className="bg-regal-blue hover:bg-regal-blue/90 mb-4 w-full text-white"
                                     disabled={isSubmitting}>
                                     {isSubmitting ? (
                                         <>
@@ -131,7 +130,7 @@ export function AdminForm() {
                                     ) : (
                                         <>
                                             <UserPlus className="mr-2 h-4 w-4" />
-                                            สร้างผู้ดูแลระบบ
+                                            สร้างผู้ใช้
                                         </>
                                     )}
                                 </Button>
@@ -141,8 +140,8 @@ export function AdminForm() {
                 </CardContent>
             </Card>
 
-            {/* Admin Table to display existing admins */}
-            <AdminTable />
+            {/* User Table to display existing users */}
+            <UserTable />
         </>
     );
 }

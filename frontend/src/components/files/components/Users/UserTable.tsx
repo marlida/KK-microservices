@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
     useReactTable,
     getCoreRowModel,
@@ -12,23 +13,23 @@ import {
     PaginationState,
 } from "@tanstack/react-table";
 
-import { AdminServices } from "@/services/adminServices";
+import { UserServices } from "@/services/userServices";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { Admin } from "@/types/admin";
+import { User } from "@/types/user";
 
 import { Trash2 } from "lucide-react";
 import { Disc3, RefreshCw } from "lucide-react";
-import { AdminEdit } from "./AdminEdit";
+import { UserEdit } from "./UserEdit";
 import { ArrowUpDown } from "lucide-react";
 
-const columnHelper = createColumnHelper<Admin>();
+const columnHelper = createColumnHelper<User>();
 
-function AdminTable() {
+function UserTable() {
     // State to manage the data, loading state, sorting, and filtering
-    const [data, setData] = useState<Admin[]>([]);
+    const [data, setData] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -43,10 +44,10 @@ function AdminTable() {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const data = await AdminServices.fetchAdminData();
+            const data = await UserServices.fetchUserData();
             setData(data);
         } catch (error) {
-            console.error("Error fetching admin data:", error);
+            console.error("Error fetching user data:", error);
         } finally {
             setLoading(false);
         }
@@ -58,10 +59,10 @@ function AdminTable() {
 
     const handelDelete = async (id: string) => {
         try {
-            await AdminServices.deleteAdmin(id);
+            await UserServices.deleteUser(id);
             fetchData();
         } catch (error) {
-            console.error("Error deleting admin:", error);
+            console.error("Error deleting user:", error);
         }
     };
 
@@ -72,7 +73,7 @@ function AdminTable() {
             cell: info => info.getValue(),
         }),
         columnHelper.accessor("name", {
-            header: "ชื่อผู้ดูแลระบบ",
+            header: "ชื่อผู้ใช้",
             cell: info => info.getValue(),
         }),
         columnHelper.accessor("tel", {
@@ -92,7 +93,7 @@ function AdminTable() {
             header: "การจัดการ",
             cell: ({ row }) => (
                 <div className="flex justify-center space-x-2">
-                    <AdminEdit admin={row.original} onUpdateSuccess={fetchData} />
+                    <UserEdit user={row.original} onUpdateSuccess={fetchData} />
                     <Button
                         variant={"outline"}
                         onClick={() => handelDelete(row.original.id.toString())}>
@@ -133,13 +134,12 @@ function AdminTable() {
 
     return (
         <div className="mt-7 w-auto">
-
             {/* Header with search and refresh */}
             <div className="mb-4 flex items-center justify-between">
                 <Input
                     value={globalFilter ?? ""}
                     onChange={e => setGlobalFilter(e.target.value)}
-                    placeholder="ค้นหาผู้ดูแลระบบ..."
+                    placeholder="ค้นหาผู้ใช้..."
                     className="w-full max-w-sm"
                 />
                 <Button
@@ -264,9 +264,8 @@ function AdminTable() {
                     </Button>
                 </div>
             </div>
-            
         </div>
     );
 }
 
-export default AdminTable;
+export default UserTable;

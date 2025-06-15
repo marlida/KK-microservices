@@ -1,4 +1,4 @@
-import { createAdmin, fetchAdminData, updateAdmin } from "@/api/admin";
+import { createAdmin, fetchAdminData, updateAdmin, deleteAdmin } from "@/api/admin";
 import { Admin } from "@/types/admin";
 
 export class AdminServices {
@@ -14,9 +14,7 @@ export class AdminServices {
             console.error("เกิดข้อผิดพลาดในการดึงข้อมูลผู้ดูแลระบบ:", error);
             throw new Error("ไม่สามารถดึงข้อมูลผู้ดูแลระบบได้");
         }
-    }
-
-    static async createAdmin(adminData: Admin) {
+    }    static async createAdmin(adminData: Partial<Admin>) {
         try {
             const res = await createAdmin(adminData);
             return res.message;
@@ -36,7 +34,13 @@ export class AdminServices {
         }
     }
 
-    //   async deleteAdmin(id: string) {
-    //     return await deleteAdmin(id);
-    //   }
+    static async deleteAdmin(id: string) {
+        try {
+            const res = await deleteAdmin(id);
+            return res.message
+        } catch (error) {
+            console.error("เกิดข้อผิดพลาดในการอัปเดตผู้ดูแลระบบ:", error);
+            throw new Error("ไม่สามารถอัปเดตผู้ดูแลระบบได้");
+        }
+      }
 }

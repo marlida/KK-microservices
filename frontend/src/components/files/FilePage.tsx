@@ -2,15 +2,15 @@
 
 import React from "react";
 
-import PageTitle from "../Common/PageTitle";
 import { AdminForm } from "./components/Admin/AdminForm";
 
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
+import { UserForm } from "./components/Users/UserForm";
 
 const sections = [
     { name: "แอดมิน", component: <AdminForm /> },
-    { name: "ผู้ใช้", component: <div>ส่วนผู้ใช้</div> },
+    { name: "ผู้ใช้", component: <UserForm /> },
     { name: "หมวดหมู่", component: <div>ส่วนหมวดหมู่</div> },
     { name: "แบรนด์", component: <div>ส่วนแบรนด์</div> },
     { name: "สินค้า", component: <div>ส่วนสินค้า</div> },
@@ -22,7 +22,6 @@ function FilePage() {
 
     return (
         <>
-            <PageTitle title="หน้าสร้างข้อมูล" />
             <div className="relative p-6 dark:bg-zinc-900">
                 <div className="relative z-10 flex items-center gap-2">
                     {sections.map(section => (

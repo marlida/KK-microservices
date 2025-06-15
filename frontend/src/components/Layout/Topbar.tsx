@@ -14,7 +14,7 @@ function Topbar() {
     const { setTheme } = useTheme();
 
     return (
-        <header className="flex items-center justify-between border-b bg-purple-900 p-4 dark:bg-black">
+        <header className="flex items-center justify-between border-b bg-regal-blue p-4 dark:bg-black">
             <div className="text-xl font-semibold text-white"> KK SERVICE</div>
             <div className="flex items-center">
                 <DropdownMenu>

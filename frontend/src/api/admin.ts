@@ -7,12 +7,12 @@ export const fetchAdminData = async () => {
   return response.data;
 };
 
-export const createAdmin = async (adminData: any) => {
+export const createAdmin = async (adminData: unknown) => {
   const response = await axios.post(`${API_BASE_URL}/admin`, adminData);
   return response.data;
 };
 
-export const updateAdmin = async (id: string, adminData: any) => {
+export const updateAdmin = async (id: string, adminData: unknown) => {
   const response = await axios.put(`${API_BASE_URL}/admin/${id}`, adminData);
   return response.data;
 };
