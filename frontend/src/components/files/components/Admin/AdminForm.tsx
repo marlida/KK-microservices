@@ -18,7 +18,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 // Form handling
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createAdminSchema, type CreateAdminInput } from "./schema";
+import { createAdminSchema, type CreateAdminInput } from "../../../../schemas/admin";
 
 // Components
 import AdminTable from "./AdminTable";

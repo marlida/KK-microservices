@@ -7,13 +7,14 @@ import { AdminForm } from "./components/Admin/AdminForm";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { UserForm } from "./components/Users/UserForm";
+import { ProductForm } from "./components/Products/ProductForm";
 
 const sections = [
     { name: "แอดมิน", component: <AdminForm /> },
     { name: "ผู้ใช้", component: <UserForm /> },
     { name: "หมวดหมู่", component: <div>ส่วนหมวดหมู่</div> },
     { name: "แบรนด์", component: <div>ส่วนแบรนด์</div> },
-    { name: "สินค้า", component: <div>ส่วนสินค้า</div> },
+    { name: "สินค้า", component: <ProductForm /> },
     { name: "ใบงาน", component: <div>ส่วนใบงาน</div> },
 ];
 

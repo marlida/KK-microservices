@@ -26,7 +26,7 @@ import { Input } from "@/components/ui/input";
 // Form handling
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateAdminSchema, type UpdateAdminInput } from "./schema";
+import { updateAdminSchema, type UpdateAdminInput } from "../../../../schemas/admin";
 
 // Types and Services
 import { Admin } from "@/types/admin";
