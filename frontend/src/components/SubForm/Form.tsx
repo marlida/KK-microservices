@@ -15,13 +15,7 @@ import {
     FormMessage,
 } from "../ui/form";
 
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 import { Input } from "@/components/ui/input";
 
@@ -59,6 +53,16 @@ const fataSchema = z.object({
     technicianFound: z.string().min(0, {
         message: "ใส่อาการที่ช่างพบ",
     }),
+    status: z.string().min(0, {
+        message: "กรุณาเลือกสถานะ",
+    }),
+    priceFix: z.string().min(0, {
+        message: "ใส่ราคาซ่อม",
+    }),
+
+    deposit: z.string().min(0, {
+        message: "ใส่เงินมัดจำ",
+    }),
 });
 
 export function SubForm() {
@@ -76,6 +80,9 @@ export function SubForm() {
             responPerson: "",
             resportingRepairs: "",
             technicianFound: "",
+            status: "",
+            priceFix: "",
+            deposit: "",
         },
     });
 
@@ -85,15 +92,9 @@ export function SubForm() {
 
     return (
         <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
-                autoComplete="off"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" autoComplete="off">
                 <FormDescription>
-                    <h2 className="text-xl font-semibold text-gray-800">
-                        ข้อมูลลูกค้า
-                    </h2>
+                    <h2 className="text-xl font-semibold text-gray-800">ข้อมูลลูกค้า</h2>
                 </FormDescription>
 
                 {/* ชื่อ */}
@@ -141,11 +142,7 @@ export function SubForm() {
                         <FormItem>
                             <FormLabel>กรอกวันที่ส่งซ่อม</FormLabel>
                             <FormControl>
-                                <Input
-                                    className="w-[200px]"
-                                    type="date"
-                                    {...field}
-                                />
+                                <Input className="w-[200px]" type="date" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -153,9 +150,7 @@ export function SubForm() {
                 />
 
                 <FormDescription>
-                    <h2 className="text-xl font-semibold text-gray-800">
-                        ข้อมูลสินค้า
-                    </h2>
+                    <h2 className="text-xl font-semibold text-gray-800">ข้อมูลสินค้า</h2>
                 </FormDescription>
 
                 <div className="flex gap-20">
@@ -165,28 +160,17 @@ export function SubForm() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>ประเภทสินค้า</FormLabel>
-                                <Select
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                >
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger className="w-[300px]">
                                             <SelectValue placeholder="เลือกประเภทสินค้า" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="โทรศัพท์">
-                                            โทรศัพท์
-                                        </SelectItem>
-                                        <SelectItem value="แท็บเล็ต">
-                                            แท็บเล็ต
-                                        </SelectItem>
-                                        <SelectItem value="โน้ตบุ๊ค">
-                                            โน้ตบุ๊ค
-                                        </SelectItem>
-                                        <SelectItem value="อุปกรณ์เสริม">
-                                            อุปกรณ์เสริม
-                                        </SelectItem>
+                                        <SelectItem value="โทรศัพท์">โทรศัพท์</SelectItem>
+                                        <SelectItem value="แท็บเล็ต">แท็บเล็ต</SelectItem>
+                                        <SelectItem value="โน้ตบุ๊ค">โน้ตบุ๊ค</SelectItem>
+                                        <SelectItem value="อุปกรณ์เสริม">อุปกรณ์เสริม</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -200,28 +184,17 @@ export function SubForm() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>ยี่ห้อสินค้า</FormLabel>
-                                <Select
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                >
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger className="w-[300px]">
                                             <SelectValue placeholder="เลือกประเภทสินค้า" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="โทรศัพท์">
-                                            โทรศัพท์
-                                        </SelectItem>
-                                        <SelectItem value="แท็บเล็ต">
-                                            แท็บเล็ต
-                                        </SelectItem>
-                                        <SelectItem value="โน้ตบุ๊ค">
-                                            โน้ตบุ๊ค
-                                        </SelectItem>
-                                        <SelectItem value="อุปกรณ์เสริม">
-                                            อุปกรณ์เสริม
-                                        </SelectItem>
+                                        <SelectItem value="โทรศัพท์">โทรศัพท์</SelectItem>
+                                        <SelectItem value="แท็บเล็ต">แท็บเล็ต</SelectItem>
+                                        <SelectItem value="โน้ตบุ๊ค">โน้ตบุ๊ค</SelectItem>
+                                        <SelectItem value="อุปกรณ์เสริม">อุปกรณ์เสริม</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -288,9 +261,7 @@ export function SubForm() {
                 />
 
                 <FormDescription>
-                    <h2 className="text-xl font-semibold text-gray-800">
-                        ข้อมูลการซ่อม
-                    </h2>
+                    <h2 className="text-xl font-semibold text-gray-800">ข้อมูลการซ่อม</h2>
                 </FormDescription>
 
                 <div className="flex gap-10">
@@ -319,28 +290,17 @@ export function SubForm() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>ผู้รับผิดชอบ</FormLabel>
-                                <Select
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                >
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger className="w-[300px]">
                                             <SelectValue placeholder="ผู้รับผิดชอบ" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="beam1">
-                                            beam1
-                                        </SelectItem>
-                                        <SelectItem value="beam2">
-                                            beam2
-                                        </SelectItem>
-                                        <SelectItem value="beam3">
-                                            beam3
-                                        </SelectItem>
-                                        <SelectItem value="beam4">
-                                            beam4
-                                        </SelectItem>
+                                        <SelectItem value="beam1">beam1</SelectItem>
+                                        <SelectItem value="beam2">beam2</SelectItem>
+                                        <SelectItem value="beam3">beam3</SelectItem>
+                                        <SelectItem value="beam4">beam4</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -356,11 +316,7 @@ export function SubForm() {
                         <FormItem>
                             <FormLabel>อาการแจ้งซ่อม</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="message"
-                                    className="w-[800px]"
-                                    {...field}
-                                />
+                                <Input type="message" className="w-[800px]" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -374,11 +330,7 @@ export function SubForm() {
                         <FormItem>
                             <FormLabel>อาการที่ช่างพบ</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="message"
-                                    className="w-[800px]"
-                                    {...field}
-                                />
+                                <Input type="message" className="w-[800px]" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -386,30 +338,20 @@ export function SubForm() {
                 />
 
                 <div className="flex gap-5">
-
                     <FormField
                         control={form.control}
                         name="status"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>สถานะ</FormLabel>
-                                <Select
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                >
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger className="w-[200px]"></SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="beamcanfix">
-                                            พังเละ
-                                        </SelectItem>
-                                        <SelectItem value="beamcanfix1">
-                                            พังเละ
-                                        </SelectItem>
-                                        <SelectItem value="beamcanfix2">
-                                            พังเละ
-                                        </SelectItem>
+                                        <SelectItem value="beamcanfix">พังเละ</SelectItem>
+                                        <SelectItem value="beamcanfix1">พังเละ</SelectItem>
+                                        <SelectItem value="beamcanfix2">พังเละ</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />
@@ -417,43 +359,33 @@ export function SubForm() {
                         )}
                     />
 
-                       <FormField
-                    control={form.control}
-                    name="priceFix"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>ราคาซ่อม</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="message"
-                                    className="w-[200px]"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                /> 
+                    <FormField
+                        control={form.control}
+                        name="priceFix"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>ราคาซ่อม</FormLabel>
+                                <FormControl>
+                                    <Input type="message" className="w-[200px]" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-
-                       <FormField
-                    control={form.control}
-                    name="deposit"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>เงินมัดจำ</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="message"
-                                    className="w-[200px]"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                /> 
-
+                    <FormField
+                        control={form.control}
+                        name="deposit"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>เงินมัดจำ</FormLabel>
+                                <FormControl>
+                                    <Input type="message" className="w-[200px]" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
 
                 <Button type="submit">บันทึก</Button>

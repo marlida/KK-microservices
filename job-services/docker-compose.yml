@@ -3,9 +3,11 @@ version: '3.8'
 services:
   app:
     container_name: job-services
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: job-services:latest
+    restart: always
     ports:
       - "8000:8000"  
     volumes:

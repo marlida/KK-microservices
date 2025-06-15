@@ -22,19 +22,18 @@ function Sidebar() {
     const isActive = (path: string) => {
         return pathname === path;
     };
+
     return (
         <div className="flex flex-col">
             {iconic.map((item, index) => (
                 <a href={item.path} key={index}>
                     <div
-                        className={`cursor-pointer p-4 transition-all duration-200 ${
-                            isActive(item.path)
-                                ? "bg-purple-200 text-purple-900"
-                                : "text-purple-500 hover:bg-purple-600 hover:text-white"
-                        }`}
-                    >
+                        className={`cursor-pointer p-4 text-purple-900 transition-all duration-200 dark:text-white ${
+                            isActive(item.path) ? "bg-purple-200 dark:bg-zinc-800" : "hover:bg-purple-100 hover:dark:bg-zinc-700"
+                        }`}>
                         <item.icon size={24} />
                     </div>
+                    {isActive(item.path) && <div className="h-0.5 bg-purple-500"></div>}
                 </a>
             ))}
         </div>
