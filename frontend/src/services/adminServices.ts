@@ -1,4 +1,5 @@
-import { createAdmin, fetchAdminData } from "@/api/admin";
+import { createAdmin, fetchAdminData, updateAdmin } from "@/api/admin";
+import { Admin } from "@/types/admin";
 
 export class AdminServices {
     static async fetchAdminData() {
@@ -15,7 +16,7 @@ export class AdminServices {
         }
     }
 
-    static async createAdmin(adminData: any) {
+    static async createAdmin(adminData: Admin) {
         try {
             const res = await createAdmin(adminData);
             return res.message;
@@ -25,9 +26,15 @@ export class AdminServices {
         }
     }
 
-    //   async updateAdmin(id: string, adminData: any) {
-    //     return await updateAdmin(id, adminData);
-    //   }
+    static async updateAdmin(id: string, adminData: Partial<Admin>) {
+        try {
+            const res = await updateAdmin(id, adminData);
+            return res;
+        } catch (error) {
+            console.error("เกิดข้อผิดพลาดในการอัปเดตผู้ดูแลระบบ:", error);
+            throw new Error("ไม่สามารถอัปเดตผู้ดูแลระบบได้");
+        }
+    }
 
     //   async deleteAdmin(id: string) {
     //     return await deleteAdmin(id);
