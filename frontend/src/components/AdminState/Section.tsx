@@ -2,8 +2,7 @@
 
 import React, { useState } from "react";
 import MockTable from "@/components/Datableta/mockTable";
-import Form  from "@/components/SubForm/Form";
-
+import { SubForm } from "@/components/SubForm/Form";
 const AdminSection: React.FC = () => {
     const [currentSection, setCurrentSection] = useState<"section1" | "section2">("section1");
 
@@ -40,7 +39,7 @@ const AdminSection: React.FC = () => {
                         {currentSection === "section1" ? (
                             <MockTable />
                         ) : (
-                            <Form />
+                            <SubForm />
                         )}
                     </div>
                 </div>
